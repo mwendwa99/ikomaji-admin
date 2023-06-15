@@ -8,8 +8,8 @@ interface ContextType {
   dashboard: {
     id: number;
     title: string;
-    description: string;
-    status: string;
+    value: number;
+    percentage: string;
   }[];
 }
 
@@ -17,25 +17,29 @@ const initialState = {
   dashboard: [
     {
       id: 1,
-      title: "Card 1",
-      description: "Card 1 description",
-      status: "todo",
+      title: "Total Page Views",
+      value: 999,
+      percentage: "30%",
     },
     {
       id: 2,
-      title: "Card 2",
-      description: "Card 2 description",
-      status: "todo",
+      title: "Total Users",
+      value: 999,
+      percentage: "30%",
     },
     {
-      id: 2,
-      title: "Card 3",
-      description: "Card 3 description",
-      status: "zaza",
+      id: 3,
+      title: "Total Orders",
+      value: 999,
+      percentage: "40%",
+    },
+    {
+      id: 4,
+      title: "Total Sales",
+      value: 999,
+      percentage: "40%",
     },
   ],
-  graph: {},
-  historyList: {},
 };
 
 export const DefaultAppContext = createContext<ContextType>(initialState);

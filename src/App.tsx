@@ -5,12 +5,13 @@ import "./App.css";
 
 import Box from "@mui/material/Box";
 import Card from "./components/Card/Card";
+import Drawer from "./components/Drawer/Drawer";
 
 interface CardData {
   id: number;
   title: string;
-  description: string;
-  status: string;
+  value: number;
+  percentage: string;
 }
 
 interface AppData {
@@ -21,9 +22,16 @@ function Dashboard() {
   const appData = useContext<AppData>(DefaultAppContext);
   console.log(appData);
   return (
-    <Box id="dashboard">
+    <Box id="dashboard" sx={boxStyle}>
       {appData.dashboard.map((item, index) => (
-        <Card key={index} title={item.title} description={item.description} />
+        <Box id="card" sx={cardStyle}>
+          <Card
+            key={index}
+            title={item.title}
+            value={item.value}
+            percentage={item.percentage}
+          />
+        </Box>
       ))}
     </Box>
   );
@@ -32,10 +40,21 @@ function Dashboard() {
 function App() {
   return (
     <>
-      <Dashboard />
+      <Drawer>
+        <Dashboard />
+      </Drawer>
       <Box id="historyList"></Box>
     </>
   );
 }
 
 export default App;
+
+const boxStyle = {
+  display: "flex",
+  flexDirection: "row",
+};
+const cardStyle = {
+  m: 1,
+  p: 1,
+};

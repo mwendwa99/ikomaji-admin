@@ -1,24 +1,14 @@
-import React from "react";
-
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 
 interface CardProps {
   title: string;
-  description: string;
+  value: number;
+  percentage: string;
 }
 
 const BasicCard = (props: CardProps) => {
@@ -28,19 +18,42 @@ const BasicCard = (props: CardProps) => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {props.title}
         </Typography>
-        <Typography variant="h5" component="div">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
+        <Box sx={valueStyle}>
+          <Typography variant="h5" component="div">
+            {props.value}
+          </Typography>
+          <Box sx={percentageStyle}>
+            <TrendingUpIcon />
+            <Typography variant="body1" component="div">
+              {props.percentage}
+            </Typography>
+          </Box>
+        </Box>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          adjective
+          You made <span style={{ color: "#1890ff" }}> {props.value}</span> this
+          year
         </Typography>
-        <Typography variant="body2">{props.description}</Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 };
 
 export default BasicCard;
+
+const valueStyle = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+};
+
+const percentageStyle = {
+  width: "100px",
+  backgroundColor: "#1890ff",
+  py: 0.5,
+  mx: 2,
+  borderRadius: 2,
+  display: "flex",
+  justifyContent: "space-evenly",
+  alignItems: "center",
+  color: "white",
+};
