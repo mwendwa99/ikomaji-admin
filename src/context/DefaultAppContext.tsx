@@ -1,47 +1,19 @@
 import { createContext, useState, ReactNode } from "react";
 
-interface Card {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-}
-
-interface Graph {
-  // Define the properties for the graph object
-  // Add the appropriate types
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-}
-
-interface HistoryList {
-  // Define the properties for the historyList object
-  // Add the appropriate types
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-}
-
-interface DefaultAppData {
-  dashboard: Card[];
-  graph: Graph;
-  historyList: HistoryList;
-}
-
-interface DefaultAppContextProps {
-  defaultData: DefaultAppData;
-}
-
-export const DefaultAppContext = createContext(initialState);
-
-interface DefaultAppProviderProps {
+interface ChildrenType {
   children: ReactNode;
 }
 
-const initialState: DefaultAppData = {
+interface ContextType {
+  dashboard: {
+    id: number;
+    title: string;
+    description: string;
+    status: string;
+  }[];
+}
+
+const initialState = {
   dashboard: [
     {
       id: 1,
@@ -62,67 +34,19 @@ const initialState: DefaultAppData = {
       status: "zaza",
     },
   ],
-  graph: {
-    id: 2,
-    title: "Card 3",
-    description: "Card 3 description",
-    status: "zaza",
-  },
-  historyList: {
-    id: 2,
-    title: "Card 3",
-    description: "Card 3 description",
-    status: "zaza",
-  },
+  graph: {},
+  historyList: {},
 };
-const DefaultAppProvider = ({ children }: DefaultAppProviderProps) => {
-  const [defaultData] = useState<DefaultAppData>(initialState);
+
+export const DefaultAppContext = createContext<ContextType>(initialState);
+
+export const DefaultAppProvider = ({ children }: ChildrenType) => {
+  const [defaultData] = useState(initialState);
 
   return (
-    <DefaultAppContext.Provider value={{ defaultData }}>
+    <DefaultAppContext.Provider value={defaultData}>
       {children}
     </DefaultAppContext.Provider>
   );
 };
-
 export default DefaultAppProvider;
-
-// import { createContext, useState } from "react";
-
-// const initialState = {
-//   dashboard: [
-//     {
-//       id: 1,
-//       title: "Card 1",
-//       description: "Card 1 description",
-//       status: "todo",
-//     },
-//     {
-//       id: 2,
-//       title: "Card 2",
-//       description: "Card 2 description",
-//       status: "todo",
-//     },
-//     {
-//       id: 2,
-//       title: "Card 3",
-//       description: "Card 3 description",
-//       status: "zaza",
-//     },
-//   ],
-//   graph: {},
-//   historyList: {},
-// };
-
-// const DefaultAppContext = createContext();
-
-// export const DefaultAppProvider = ({ children }) => {
-//   const [defaultData] = useState(initialState);
-
-//   return (
-//     <DefaultAppContext.Provider value={defaultData}>
-//       {children}
-//     </DefaultAppContext.Provider>
-//   );
-// };
-// export default DefaultAppContext;
