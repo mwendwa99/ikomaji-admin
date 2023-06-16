@@ -37,7 +37,7 @@ const BasicCard = (props: CardProps) => {
           </Box>
         </Box>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          You made <span style={{ color: "#1890ff" }}> {props.value}</span> this
+          You made <span style={{ color: "#46df99" }}> {props.value}</span> this
           year
         </Typography>
       </CardContent>
@@ -55,7 +55,7 @@ const valueStyle = {
 
 const percentageStyle = {
   width: "100px",
-  backgroundColor: "#1890ff",
+  backgroundColor: "#46df99",
   py: 0.5,
   mx: 2,
   borderRadius: 2,

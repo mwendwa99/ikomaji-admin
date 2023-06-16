@@ -5,7 +5,6 @@ import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -112,8 +111,12 @@ export default function MiniDrawer({ children }: ChildrenProps) {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar
+        elevation={0}
+        position="fixed"
+        open={open}
+        sx={{ bgcolor: "#fff", border: "1px solid #e5e5e5" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -123,11 +126,14 @@ export default function MiniDrawer({ children }: ChildrenProps) {
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
+              bgcolor: "#f5f5f5",
             }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fill: "#8b8b8b" }} />
           </IconButton>
-          <Typography variant="body1">Ikomaji Admin</Typography>
+          <Typography variant="body1" sx={{ color: "#000" }}>
+            Ikomaji Admin
+          </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
