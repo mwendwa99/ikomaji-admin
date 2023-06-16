@@ -13,7 +13,14 @@ interface CardProps {
 
 const BasicCard = (props: CardProps) => {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card
+      elevation={0}
+      sx={{
+        minWidth: 250,
+        border: "1px solid #E5E5E5",
+        backgroundColor: "#fff",
+      }}
+    >
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {props.title}
