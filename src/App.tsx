@@ -13,6 +13,8 @@ import Card from "./components/Card/Card";
 import Drawer from "./components/Drawer/Drawer";
 import Chart from "./components/Chart/BarChart";
 import GridChart from "./components/Chart/GridChart";
+import DataGrid from "./components/Chart/DataGrid";
+import List from "./components/List/List";
 
 interface CardData {
   id: number;
@@ -24,6 +26,27 @@ interface CardData {
 interface AppData {
   dashboard: CardData[];
 }
+
+const transactions = [
+  {
+    orderNumber: "TRK123",
+    time: "10:00 AM",
+    revenue: 100,
+    percentage: 10,
+  },
+  {
+    orderNumber: "TRK456",
+    time: "11:00 AM",
+    revenue: 75,
+    percentage: 5,
+  },
+  {
+    orderNumber: "TRK789",
+    time: "12:00 PM",
+    revenue: 50,
+    percentage: 2,
+  },
+];
 
 function Dashboard() {
   const appData = useContext<AppData>(DefaultAppContext);
@@ -76,7 +99,7 @@ function App() {
             </Typography>
             <Dashboard />
           </Grid>
-          <Grid item sm={5} sx={{ ml: 1 }}>
+          <Grid item sm={5} sx={{}}>
             <Typography
               variant="body1"
               sx={{ fontWeight: "bold", marginLeft: 1 }}
@@ -96,6 +119,28 @@ function App() {
             </Typography>
             <Paper elevation={0} sx={[chartStyle]}>
               <GridChart />
+            </Paper>
+          </Grid>
+          <Grid item sm={8}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "bold", marginLeft: 1 }}
+            >
+              Recent Orders
+            </Typography>
+            <Paper elevation={0} sx={chartStyle}>
+              <DataGrid />
+            </Paper>
+          </Grid>
+          <Grid item sm={3}>
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "bold", marginLeft: 1 }}
+            >
+              Transaction History
+            </Typography>
+            <Paper elevation={0} sx={chartStyle}>
+              <List transactions={transactions} />
             </Paper>
           </Grid>
         </Grid>
