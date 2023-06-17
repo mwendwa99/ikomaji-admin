@@ -1,4 +1,10 @@
 import { createContext, useState, ReactNode } from "react";
+import {
+  ordersData,
+  incomeData,
+  transactionsData,
+  dashboardData,
+} from "./initialData.js";
 
 interface ChildrenType {
   children: ReactNode;
@@ -6,40 +12,35 @@ interface ChildrenType {
 
 interface ContextType {
   dashboard: {
-    id: number;
     title: string;
     value: number;
     percentage: string;
   }[];
+  transactions: {
+    orderNumber: string;
+    time: string;
+    revenue: number;
+    percentage: number;
+  }[];
+  income: {
+    category: string;
+    value: number;
+  }[];
+  orders: {
+    id: number;
+    orderNumber: string;
+    productName: string;
+    totalOrder: number;
+    status: string;
+    totalAmount: string;
+  }[];
 }
 
 const initialState = {
-  dashboard: [
-    {
-      id: 1,
-      title: "Total Page Views",
-      value: 999,
-      percentage: "30%",
-    },
-    {
-      id: 2,
-      title: "Total Users",
-      value: 999,
-      percentage: "30%",
-    },
-    {
-      id: 3,
-      title: "Total Orders",
-      value: 999,
-      percentage: "40%",
-    },
-    {
-      id: 4,
-      title: "Total Sales",
-      value: 999,
-      percentage: "40%",
-    },
-  ],
+  dashboard: dashboardData,
+  transactions: transactionsData,
+  income: incomeData,
+  orders: ordersData,
 };
 
 export const DefaultAppContext = createContext<ContextType>(initialState);

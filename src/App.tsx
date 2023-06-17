@@ -22,31 +22,33 @@ interface CardData {
   value: number;
   percentage: string;
 }
+interface Transactions {
+  orderNumber: string;
+  time: string;
+  revenue: number;
+  percentage: number;
+}
+
+interface Income {
+  category: string;
+  value: number;
+}
+
+interface Orders {
+  id: number;
+  orderNumber: string;
+  productName: string;
+  totalOrder: number;
+  status: string;
+  totalAmount: string;
+}
 
 interface AppData {
   dashboard: CardData[];
+  transactions: Transactions[];
+  income: Income[];
+  orders: Orders[];
 }
-
-const transactions = [
-  {
-    orderNumber: "TRK123",
-    time: "10:00 AM",
-    revenue: 100,
-    percentage: 10,
-  },
-  {
-    orderNumber: "TRK456",
-    time: "11:00 AM",
-    revenue: 75,
-    percentage: 5,
-  },
-  {
-    orderNumber: "TRK789",
-    time: "12:00 PM",
-    revenue: 50,
-    percentage: 2,
-  },
-];
 
 function Dashboard() {
   const appData = useContext<AppData>(DefaultAppContext);
@@ -78,13 +80,6 @@ function App() {
     }, 0);
   }, [appData.dashboard]);
 
-  const data = [
-    { category: "Monday", value: 10 },
-    { category: "Tuesday", value: 20 },
-    { category: "Wednesday", value: 15 },
-    { category: "Thursday", value: 5 },
-    { category: "Friday", value: 8 },
-  ];
   return (
     <div style={containerStyle}>
       <CssBaseline />
@@ -107,7 +102,7 @@ function App() {
               Income Overview
             </Typography>
             <Paper elevation={0} sx={chartStyle}>
-              <Chart data={data} valueSum={valueSum} />
+              <Chart data={appData.income} valueSum={valueSum} />
             </Paper>
           </Grid>
           <Grid item sm={6}>
@@ -129,7 +124,7 @@ function App() {
               Recent Orders
             </Typography>
             <Paper elevation={0} sx={chartStyle}>
-              <DataGrid />
+              <DataGrid orders={appData.orders} />
             </Paper>
           </Grid>
           <Grid item sm={3}>
@@ -140,7 +135,7 @@ function App() {
               Transaction History
             </Typography>
             <Paper elevation={0} sx={chartStyle}>
-              <List transactions={transactions} />
+              <List transactions={appData.transactions} />
             </Paper>
           </Grid>
         </Grid>
