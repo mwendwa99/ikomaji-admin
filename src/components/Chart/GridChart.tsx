@@ -25,8 +25,9 @@ const data: { month: string; value: number }[] = [
 ];
 
 const columns: GridColDef[] = [
-  { field: "title", headerName: "", width: 150 },
-  { field: "value", headerName: "", width: 50 },
+  { field: "id", headerName: "No.", width: 150 },
+  { field: "title", headerName: "Category", width: 150 },
+  { field: "value", headerName: "Value", width: 50 },
 ];
 
 const rows: DataRow[] = [
@@ -48,13 +49,7 @@ const SimpleGridWithChart: React.FC = () => {
   };
   return (
     <Box>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={4}
-        disableSelectionOnClick
-        autoHeight
-      />
+      <DataGrid rows={rows} columns={columns} autoHeight />
       <Chart data={data} height={230}>
         {" "}
         <ArgumentAxis />

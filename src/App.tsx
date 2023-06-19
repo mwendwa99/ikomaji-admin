@@ -88,7 +88,7 @@ function DashboardPage({
         </Typography>
         <Dashboard />
       </Grid>
-      <Grid item sm={5} sx={{}}>
+      <Grid item sm={5}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Income Overview
         </Typography>
@@ -96,7 +96,7 @@ function DashboardPage({
           <Chart data={appData.income} valueSum={valueSum} />
         </Paper>
       </Grid>
-      <Grid item sm={6}>
+      <Grid item sm={7}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Analytics Report
         </Typography>
@@ -104,13 +104,8 @@ function DashboardPage({
           <GridChart />
         </Paper>
       </Grid>
-      <Grid item sm={8}>
-        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
-          Recent Orders
-        </Typography>
-        <Paper elevation={0} sx={chartStyle}>
-          <DataGrid orders={appData.orders} />
-        </Paper>
+      <Grid item sm={9}>
+        <InventoryPage appData={appData} />
       </Grid>
       <Grid item sm={3}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
@@ -118,6 +113,21 @@ function DashboardPage({
         </Typography>
         <Paper elevation={0} sx={chartStyle}>
           <List transactions={appData.transactions} />
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+}
+
+function InventoryPage({ appData }: { appData: AppData }) {
+  return (
+    <Grid container sx={{ height: "100%" }}>
+      <Grid item sm={12}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Recent Orders
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
+          <DataGrid orders={appData.orders} />
         </Paper>
       </Grid>
     </Grid>
@@ -150,7 +160,7 @@ function App() {
         <div style={containerStyle}>
           <CssBaseline />
           <Drawer handleSelectedPage={handleSelectedPage}>
-            <h1>Inventory</h1>
+            <InventoryPage appData={appData} />
           </Drawer>
         </div>
       );

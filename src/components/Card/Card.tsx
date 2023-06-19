@@ -16,7 +16,7 @@ const BasicCard = (props: CardProps) => {
     <Card
       elevation={0}
       sx={{
-        minWidth: 250,
+        minWidth: 200,
         border: "1px solid #E5E5E5",
         backgroundColor: "#fff",
       }}

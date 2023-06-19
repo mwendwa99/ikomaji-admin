@@ -60,7 +60,7 @@ const RecentOrdersGrid: React.FC<Props> = (props) => {
         },
       }}
     >
-      <DataGrid rows={props.orders} columns={columns} pageSize={5} />
+      <DataGrid rows={props.orders} columns={columns} />
     </Box>
   );
 };
