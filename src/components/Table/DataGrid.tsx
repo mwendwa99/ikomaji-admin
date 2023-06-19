@@ -48,7 +48,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-const RecentOrdersGrid: React.FC = (props: Props) => {
+const RecentOrdersGrid: React.FC<Props> = (props) => {
   return (
     <Box
       sx={{

@@ -26,6 +26,7 @@ const drawerWidth = 200;
 
 interface ChildrenProps {
   children: React.ReactNode;
+  handleSelectedPage: (page: string) => void;
 }
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -97,7 +98,10 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer({ children }: ChildrenProps) {
+export default function MiniDrawer({
+  children,
+  handleSelectedPage,
+}: ChildrenProps) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -150,7 +154,12 @@ export default function MiniDrawer({ children }: ChildrenProps) {
         <Divider />
         <List>
           {["Dashboard", "Inventory"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
+            <ListItem
+              onClick={() => handleSelectedPage(text)}
+              key={text}
+              disablePadding
+              sx={{ display: "block" }}
+            >
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -175,7 +184,12 @@ export default function MiniDrawer({ children }: ChildrenProps) {
         <Divider />
         <List>
           {["Support", "Logout"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
+            <ListItem
+              onClick={() => handleSelectedPage(text)}
+              key={text}
+              disablePadding
+              sx={{ display: "block" }}
+            >
               <ListItemButton
                 sx={{
                   minHeight: 48,

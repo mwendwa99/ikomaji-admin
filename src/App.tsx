@@ -1,6 +1,7 @@
 import { useContext, useMemo } from "react";
 
 import { DefaultAppContext } from "./context/DefaultAppContext";
+import { DrawerContext } from "./context/DrawerContext";
 import "./App.css";
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +14,7 @@ import Card from "./components/Card/Card";
 import Drawer from "./components/Drawer/Drawer";
 import Chart from "./components/Chart/BarChart";
 import GridChart from "./components/Chart/GridChart";
-import DataGrid from "./components/Chart/DataGrid";
+import DataGrid from "./components/Table/DataGrid";
 import List from "./components/List/List";
 
 interface CardData {
@@ -71,8 +72,61 @@ function Dashboard() {
   );
 }
 
+function DashboardPage({
+  appData,
+  valueSum,
+}: {
+  appData: AppData;
+  valueSum: number;
+}) {
+  // const appData = useContext<AppData>(DefaultAppContext);
+  return (
+    <Grid container>
+      <Grid item sm={12}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Dashboard
+        </Typography>
+        <Dashboard />
+      </Grid>
+      <Grid item sm={5} sx={{}}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Income Overview
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
+          <Chart data={appData.income} valueSum={valueSum} />
+        </Paper>
+      </Grid>
+      <Grid item sm={6}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Analytics Report
+        </Typography>
+        <Paper elevation={0} sx={[chartStyle]}>
+          <GridChart />
+        </Paper>
+      </Grid>
+      <Grid item sm={8}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Recent Orders
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
+          <DataGrid orders={appData.orders} />
+        </Paper>
+      </Grid>
+      <Grid item sm={3}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Transaction History
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
+          <List transactions={appData.transactions} />
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+}
+
 function App() {
-  const appData = useContext<AppData>(DefaultAppContext);
+  const appData = useContext(DefaultAppContext);
+  const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
 
   const valueSum = useMemo(() => {
     return appData.dashboard.reduce((acc, item) => {
@@ -80,69 +134,36 @@ function App() {
     }, 0);
   }, [appData.dashboard]);
 
-  return (
-    <div style={containerStyle}>
-      <CssBaseline />
-      <Drawer>
-        <Grid container>
-          <Grid item sm={12}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", marginLeft: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <Dashboard />
-          </Grid>
-          <Grid item sm={5} sx={{}}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", marginLeft: 1 }}
-            >
-              Income Overview
-            </Typography>
-            <Paper elevation={0} sx={chartStyle}>
-              <Chart data={appData.income} valueSum={valueSum} />
-            </Paper>
-          </Grid>
-          <Grid item sm={6}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", marginLeft: 1 }}
-            >
-              Analytics Report
-            </Typography>
-            <Paper elevation={0} sx={[chartStyle]}>
-              <GridChart />
-            </Paper>
-          </Grid>
-          <Grid item sm={8}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", marginLeft: 1 }}
-            >
-              Recent Orders
-            </Typography>
-            <Paper elevation={0} sx={chartStyle}>
-              <DataGrid orders={appData.orders} />
-            </Paper>
-          </Grid>
-          <Grid item sm={3}>
-            <Typography
-              variant="body1"
-              sx={{ fontWeight: "bold", marginLeft: 1 }}
-            >
-              Transaction History
-            </Typography>
-            <Paper elevation={0} sx={chartStyle}>
-              <List transactions={appData.transactions} />
-            </Paper>
-          </Grid>
-        </Grid>
-      </Drawer>
-      <Box id="historyList"></Box>
-    </div>
-  );
+  switch (selectedPage) {
+    case "Dashboard":
+      return (
+        <div style={containerStyle}>
+          <CssBaseline />
+          <Drawer handleSelectedPage={handleSelectedPage}>
+            <DashboardPage appData={appData} valueSum={valueSum} />
+          </Drawer>
+          <Box id="historyList"></Box>
+        </div>
+      );
+    case "Inventory":
+      return (
+        <div style={containerStyle}>
+          <CssBaseline />
+          <Drawer handleSelectedPage={handleSelectedPage}>
+            <h1>Inventory</h1>
+          </Drawer>
+        </div>
+      );
+    default:
+      return (
+        <div style={containerStyle}>
+          <CssBaseline />
+          <Drawer handleSelectedPage={handleSelectedPage}>
+            <h1>Page Not Found</h1>
+          </Drawer>
+        </div>
+      );
+  }
 }
 
 export default App;
