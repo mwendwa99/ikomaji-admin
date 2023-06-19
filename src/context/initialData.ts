@@ -1,4 +1,38 @@
-export const orders = [
+/*
+@param {object} initialData - Initial data for the application
+@param {array} initialData.users - Array of users
+@param {array} initialData.products - Array of products
+@param {array} initialData.orders - Array of orders
+@param {array} initialData.income - Array of income
+*/
+
+interface Order {
+  id: number;
+  productName: string;
+  orderNumber: string;
+  totalOrder: number;
+  status: string;
+  totalAmount: string;
+}
+interface Income {
+  category: string;
+  value: number;
+}
+interface Transaction {
+  id: number;
+  orderNumber: string;
+  time: string;
+  revenue: number;
+  percentage: number;
+}
+interface Dashboard {
+  id: number;
+  title: string;
+  value: number;
+  percentage: string;
+}
+
+export const ordersData: Order[] = [
   {
     id: 1,
     orderNumber: "TRK123",
@@ -25,7 +59,7 @@ export const orders = [
   },
 ];
 
-export const incomeData = [
+export const incomeData: Income[] = [
   { category: "Monday", value: 10 },
   { category: "Tuesday", value: 20 },
   { category: "Wednesday", value: 15 },
@@ -33,7 +67,7 @@ export const incomeData = [
   { category: "Friday", value: 8 },
 ];
 
-export const transactionsData = [
+export const transactionsData: Transaction[] = [
   {
     id: 1,
     orderNumber: "TRK123",
@@ -57,7 +91,7 @@ export const transactionsData = [
   },
 ];
 
-export const dashboardData = [
+export const dashboardData: Dashboard[] = [
   {
     id: 1,
     title: "Total Page Views",
