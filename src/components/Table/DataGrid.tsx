@@ -2,17 +2,9 @@ import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 
-interface Orders {
-  id: number;
-  orderNumber: string;
-  productName: string;
-  totalOrder: number;
-  status: string;
-  totalAmount: string;
-}
-
 interface Props {
-  orders: Orders[];
+  orders: object[];
+  loading: boolean;
 }
 
 const columns: GridColDef[] = [
@@ -25,7 +17,7 @@ const columns: GridColDef[] = [
   {
     field: "productName",
     headerName: "Product Name",
-    width: 200,
+    width: 150,
     headerClassName: "super-app-theme--header",
   },
   {
@@ -46,9 +38,29 @@ const columns: GridColDef[] = [
     width: 150,
     headerClassName: "super-app-theme--header",
   },
+  {
+    field: "orderDate",
+    headerName: "Order Date",
+    width: 150,
+    headerClassName: "super-app-theme--header",
+  },
 ];
 
 const RecentOrdersGrid: React.FC<Props> = (props) => {
+  const rowData = props.orders
+    ? props.orders.map((order: any) => {
+        return {
+          id: order.order_number,
+          orderNumber: order.order_number,
+          productName: order.product_name,
+          totalOrder: order.total_order,
+          status: order.order_status,
+          totalAmount: order.order_total,
+          orderDate: order.order_date,
+        };
+      })
+    : [];
+
   return (
     <Box
       sx={{
@@ -60,7 +72,11 @@ const RecentOrdersGrid: React.FC<Props> = (props) => {
         },
       }}
     >
-      <DataGrid rows={props.orders} columns={columns} />
+      {props.loading ? (
+        <div>Loading...</div>
+      ) : (
+        <DataGrid rows={rowData} columns={columns} autoPageSize />
+      )}
     </Box>
   );
 };
