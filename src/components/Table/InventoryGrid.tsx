@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid, GridColDef, GridRowData } from "@mui/x-data-grid";
-import { Button, TextField, Box, Input } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  Button,
+  TextField,
+  Box,
+  Input,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
 interface InventoryItem {
   id: number;
@@ -16,10 +25,12 @@ interface InventoryItem {
   };
   product_image: string;
   description: string;
+  category_id: number;
 }
 
-interface Buffer {
-  data: string;
+interface Category {
+  category_name: string;
+  category_id: number;
 }
 
 interface InventoryGridProps {
@@ -38,30 +49,31 @@ const initialRows: InventoryItem[] = [
     category: { category_name: "Category 1", category_id: 1 },
     product_image: "Image 1",
     description: "Description 1",
+    category_id: 1,
   },
-];
-
-const columns: GridColDef[] = [
-  { field: "product_id", headerName: "Product Id", width: 100 },
-  { field: "product_name", headerName: "Product Name", width: 150 },
-  { field: "alcohol_percentage", headerName: "Alc%", width: 50 },
-  { field: "quantity", headerName: "Stock", width: 100 },
-  { field: "price", headerName: "Price", width: 100 },
-  { field: "size", headerName: "Size", width: 100 },
-  {
-    field: "category_name",
-    headerName: "Category",
-    width: 100,
-    valueGetter: (params) => params.row.category?.category_name || "",
-  },
-  { field: "product_image", headerName: "Image", width: 100 },
-  { field: "description", headerName: "Description", width: 200 },
 ];
 
 const InventoryGrid: React.FC<InventoryGridProps> = ({ products, loading }) => {
   const [rows, setRows] = useState<InventoryItem[]>(initialRows);
   const [newRow, setNewRow] = useState<Partial<InventoryItem>>({});
   const [imageData, setImageData] = useState(null);
+
+  const columns: GridColDef[] = [
+    { field: "product_id", headerName: "Product Id", width: 100 },
+    { field: "product_name", headerName: "Product Name", width: 150 },
+    { field: "alcohol_percentage", headerName: "Alc%", width: 50 },
+    { field: "quantity", headerName: "Stock", width: 100 },
+    { field: "price", headerName: "Price", width: 100 },
+    { field: "size", headerName: "Size", width: 100 },
+    {
+      field: "category_id",
+      headerName: "Category",
+      width: 100,
+      valueGetter: (params) => params.row.category_id || "",
+    },
+    { field: "product_image", headerName: "Image", width: 100 },
+    { field: "description", headerName: "Description", width: 200 },
+  ];
 
   console.log("products", products);
   //   console.log("categories", categories);
@@ -71,10 +83,11 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ products, loading }) => {
       id: rows.length + 1,
       product_id: newRow.product_id || "",
       alcohol_percentage: newRow.alcohol_percentage || "",
-      category: {
-        category_name: newRow.category?.category_name || "",
-        category_id: newRow.category?.category_id || 0,
-      },
+      // category: {
+      //   category_name: newRow.category?.category_name || "",
+      //   category_id: newRow.category?.category_id || 0,
+      // },
+      category_id: newRow.category?.category_id || 0,
       product_image: newRow.product_image || "",
       product_name: newRow.product_name || "",
       quantity: newRow.quantity || 0,
@@ -153,15 +166,27 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ products, loading }) => {
           value={newRow.size || ""}
           onChange={(e) => handleFieldChange("size", e.target.value)}
         />
-
-        <TextField
-          label="Category"
-          type="text"
-          value={newRow.category?.category_name || ""}
-          onChange={(e) =>
-            handleFieldChange("category", { category_name: e.target.value })
-          }
-        />
+        <FormControl sx={{ minWidth: 100 }} size="small">
+          <InputLabel id="demo-simple-select-label">Category</InputLabel>
+          <Select
+            label="Category"
+            type="number"
+            value={newRow.category?.category_id || ""}
+            onChange={(e) =>
+              handleFieldChange("category", { category_id: e.target.value })
+            }
+            defaultValue="Category"
+          >
+            {products.map((product) => (
+              <MenuItem
+                key={product.category.category_id}
+                value={product.category.category_id}
+              >
+                {product.category.category_name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Input type="file" accept="image/*" onChange={handleFileChange} />
         <TextField
           label="Description"
