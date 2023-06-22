@@ -2,6 +2,7 @@ import { useContext, useMemo, useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { fetchOrders } from "./redux/orderSlice";
+import { fetchProducts } from "./redux/productSlice";
 
 import { DefaultAppContext } from "./context/DefaultAppContext";
 import { DrawerContext } from "./context/DrawerContext";
@@ -18,6 +19,7 @@ import Drawer from "./components/Drawer/Drawer";
 import Chart from "./components/Chart/BarChart";
 import GridChart from "./components/Chart/GridChart";
 import DataGrid from "./components/Table/DataGrid";
+import InventoryGrid from "./components/Table/InventoryGrid";
 import List from "./components/List/List";
 
 interface CardData {
@@ -55,7 +57,7 @@ interface AppData {
 }
 
 function Dashboard() {
-  const appData = useContext<AppData>(DefaultAppContext);
+  const appData = useContext(DefaultAppContext);
   return (
     <Box id="dashboard" sx={boxStyle}>
       <Grid container>
@@ -111,7 +113,12 @@ function DashboardPage({
         </Paper>
       </Grid>
       <Grid item sm={9}>
-        <InventoryPage orders={orders} loading={loading} />
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Recent Orders ss
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
+          <DataGrid orders={orders} loading={loading} />
+        </Paper>
       </Grid>
       <Grid item sm={3}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
@@ -126,20 +133,20 @@ function DashboardPage({
 }
 
 function InventoryPage({
-  orders,
+  products,
   loading,
 }: {
-  orders: object[];
+  products: object[];
   loading: boolean;
 }) {
   return (
     <Grid container sx={{ height: "100%" }}>
       <Grid item sm={12}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
-          Recent Orders
+          Inventory
         </Typography>
         <Paper elevation={0} sx={chartStyle}>
-          <DataGrid orders={orders} loading={loading} />
+          <InventoryGrid products={products} loading={loading} />
         </Paper>
       </Grid>
     </Grid>
@@ -150,10 +157,16 @@ function App() {
   const appData = useContext(DefaultAppContext);
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
   const dispatch = useAppDispatch();
-  const { orders, loading } = useAppSelector((state) => state.orders);
+  const { orders, loading: orderIsLoading } = useAppSelector(
+    (state) => state.orders
+  );
+  const { products, loading: productIsLoading } = useAppSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
     dispatch(fetchOrders());
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   const valueSum = useMemo(() => {
@@ -170,7 +183,7 @@ function App() {
           <Drawer handleSelectedPage={handleSelectedPage}>
             <DashboardPage
               appData={appData}
-              loading={loading}
+              loading={orderIsLoading}
               orders={orders}
               valueSum={valueSum}
             />
@@ -183,7 +196,7 @@ function App() {
         <div style={containerStyle}>
           <CssBaseline />
           <Drawer handleSelectedPage={handleSelectedPage}>
-            <InventoryPage orders={orders} loading={loading} />
+            <InventoryPage products={products} loading={productIsLoading} />
           </Drawer>
         </div>
       );
