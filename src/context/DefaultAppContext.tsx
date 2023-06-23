@@ -12,6 +12,7 @@ interface ChildrenType {
 
 interface ContextType {
   dashboard: {
+    id: number;
     title: string;
     value: number;
     percentage: string;
