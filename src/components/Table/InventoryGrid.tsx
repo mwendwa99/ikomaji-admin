@@ -75,9 +75,6 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ products, loading }) => {
     { field: "description", headerName: "Description", width: 200 },
   ];
 
-  console.log("products", products);
-  //   console.log("categories", categories);
-
   const handleAddRow = () => {
     const newInventoryItem: InventoryItem = {
       id: rows.length + 1,

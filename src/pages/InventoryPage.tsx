@@ -1,14 +1,20 @@
+import { useEffect } from "react";
+
 import { Grid, Paper, Typography } from "@mui/material";
+
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchProducts } from "../redux/productSlice";
 
 import InventoryGrid from "../components/Table/InventoryGrid";
 
-export default function InventoryPage({
-  products,
-  loading,
-}: {
-  products: object[];
-  loading: boolean;
-}) {
+export default function InventoryPage() {
+  const { products, loading } = useAppSelector((state) => state.products);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   return (
     <Grid container sx={{ height: "100%" }}>
       <Grid item sm={12}>

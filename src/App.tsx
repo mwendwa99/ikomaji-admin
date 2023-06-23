@@ -1,8 +1,4 @@
-import { useContext, useMemo, useEffect } from "react";
-
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { fetchOrders } from "./redux/orderSlice";
-import { fetchProducts } from "./redux/productSlice";
+import { useContext, useMemo } from "react";
 
 import { DefaultAppContext } from "./context/DefaultAppContext";
 import { DrawerContext } from "./context/DrawerContext";
@@ -13,24 +9,13 @@ import Box from "@mui/material/Box";
 
 import InventoryPage from "./pages/InventoryPage";
 import DashboardPage from "./pages/DashboardPage";
+import CategoriesPage from "./pages/CategoriesPage";
 
 import Drawer from "./components/Drawer/Drawer";
 
 function App() {
   const appData = useContext(DefaultAppContext);
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
-  const dispatch = useAppDispatch();
-  const { orders, loading: orderIsLoading } = useAppSelector(
-    (state) => state.orders
-  );
-  const { products, loading: productIsLoading } = useAppSelector(
-    (state) => state.products
-  );
-
-  useEffect(() => {
-    dispatch(fetchOrders());
-    dispatch(fetchProducts());
-  }, [dispatch]);
 
   const valueSum = useMemo(() => {
     return appData.dashboard.reduce((acc, item) => {
@@ -44,12 +29,7 @@ function App() {
         <div style={containerStyle}>
           <CssBaseline />
           <Drawer handleSelectedPage={handleSelectedPage}>
-            <DashboardPage
-              appData={appData}
-              loading={orderIsLoading}
-              orders={orders}
-              valueSum={valueSum}
-            />
+            <DashboardPage appData={appData} valueSum={valueSum} />
           </Drawer>
           <Box id="historyList"></Box>
         </div>
@@ -59,7 +39,16 @@ function App() {
         <div style={containerStyle}>
           <CssBaseline />
           <Drawer handleSelectedPage={handleSelectedPage}>
-            <InventoryPage products={products} loading={productIsLoading} />
+            <InventoryPage />
+          </Drawer>
+        </div>
+      );
+    case "Category":
+      return (
+        <div style={containerStyle}>
+          <CssBaseline />
+          <Drawer handleSelectedPage={handleSelectedPage}>
+            <CategoriesPage />
           </Drawer>
         </div>
       );

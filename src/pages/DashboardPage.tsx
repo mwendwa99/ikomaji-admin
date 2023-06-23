@@ -1,8 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { Grid, Paper, Typography, Box } from "@mui/material";
 
 import { DefaultAppContext } from "../context/DefaultAppContext";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { fetchOrders } from "../redux/orderSlice";
 
 import GridChart from "../components/Chart/GridChart";
 import BarChart from "../components/Chart/BarChart";
@@ -16,6 +18,12 @@ interface AppData {
   income: Income[];
   orders: object[];
 }
+
+interface OrdersProps {
+  orders: object[];
+  loading: boolean;
+}
+
 interface CardData {
   id: number;
   title: string;
@@ -36,7 +44,6 @@ interface Income {
 
 function Dashboard() {
   const appData = useContext(DefaultAppContext);
-
   return (
     <Box id="dashboard" sx={boxStyle}>
       <Grid container>
@@ -59,14 +66,19 @@ function Dashboard() {
 export default function DashboardPage({
   appData,
   valueSum,
-  loading,
-  orders,
 }: {
   appData: AppData;
   valueSum: number;
-  loading: boolean;
-  orders: object[];
 }) {
+  const { orders, loading } = useAppSelector<OrdersProps>(
+    (state) => state.orders
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
   return (
     <Grid container>
       <Grid item sm={12}>

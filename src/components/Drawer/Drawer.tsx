@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import CategoryIcon from "@mui/icons-material/Category";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -23,6 +24,9 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import logo from "../../assets/logo.svg";
 
 const drawerWidth = 200;
+
+const PrimaryPageArray = ["Dashboard", "Inventory", "Category"];
+const SecondaryPageArray = ["Support", "Logout"];
 
 interface ChildrenProps {
   children: React.ReactNode;
@@ -113,6 +117,23 @@ export default function MiniDrawer({
     setOpen(false);
   };
 
+  const SwitchIcons = (text: string) => {
+    switch (text) {
+      case "Dashboard":
+        return <SpaceDashboardIcon />;
+      case "Inventory":
+        return <InventoryIcon />;
+      case "Category":
+        return <CategoryIcon />;
+      case "Support":
+        return <ContactSupportIcon />;
+      case "Logout":
+        return <LogoutIcon />;
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -153,10 +174,10 @@ export default function MiniDrawer({
         </DrawerHeader>
         <Divider />
         <List>
-          {["Dashboard", "Inventory"].map((text, index) => (
+          {PrimaryPageArray.map((text, index) => (
             <ListItem
               onClick={() => handleSelectedPage(text)}
-              key={text}
+              key={index}
               disablePadding
               sx={{ display: "block" }}
             >
@@ -174,7 +195,7 @@ export default function MiniDrawer({
                     justifyContent: "center",
                   }}
                 >
-                  {index === 0 ? <SpaceDashboardIcon /> : <InventoryIcon />}
+                  {SwitchIcons(text)}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -183,10 +204,10 @@ export default function MiniDrawer({
         </List>
         <Divider />
         <List>
-          {["Support", "Logout"].map((text, index) => (
+          {SecondaryPageArray.map((text, index) => (
             <ListItem
               onClick={() => handleSelectedPage(text)}
-              key={text}
+              key={index}
               disablePadding
               sx={{ display: "block" }}
             >
@@ -204,7 +225,8 @@ export default function MiniDrawer({
                     justifyContent: "center",
                   }}
                 >
-                  {index % 2 === 0 ? <ContactSupportIcon /> : <LogoutIcon />}
+                  {/* {index % 2 === 0 ? <ContactSupportIcon /> : <LogoutIcon />} */}
+                  {SwitchIcons(text)}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
