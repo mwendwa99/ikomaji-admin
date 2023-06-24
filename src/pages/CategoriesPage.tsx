@@ -13,6 +13,8 @@ import {
   MenuItem,
 } from "@mui/material";
 
+import DataGridComponent from "../components/Table/DataTable";
+
 interface Category {
   category_id: number;
   category_name: string;
@@ -47,7 +49,40 @@ const CategoryPage = () => {
           </Typography>
         </Grid>
         <Grid item sm={12}>
-          <FormControl sx={formControlStyle}>
+          <DataGridComponent
+            rows={[
+              {
+                id: 1,
+                category_id: 1,
+                category_name: "Vodka",
+                category_image: "vodka.jpg",
+                description: "Vodka is a clear distilled alcoholic beverage",
+              },
+            ]}
+            columns={[
+              {
+                field: "category_id",
+                headerName: "ID",
+                width: 100,
+              },
+              {
+                field: "category_name",
+                headerName: "Category Name",
+                width: 200,
+              },
+              {
+                field: "category_image",
+                headerName: "Category Image",
+                width: 200,
+              },
+              {
+                field: "description",
+                headerName: "Description",
+                width: 200,
+              },
+            ]}
+          />
+          {/* <FormControl sx={formControlStyle}>
             <InputLabel id="demo-simple-select-label">
               select category
             </InputLabel>
@@ -58,7 +93,7 @@ const CategoryPage = () => {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </FormControl> */}
         </Grid>
       </Grid>
     </Box>
