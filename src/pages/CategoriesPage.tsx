@@ -5,12 +5,12 @@ import { fetchCategory } from "../redux/categorySlice";
 
 import {
   Box,
-  Grid,
-  Typography,
   FormControl,
-  Select,
+  Grid,
   InputLabel,
   MenuItem,
+  Select,
+  Typography,
 } from "@mui/material";
 
 import DataGridComponent from "../components/Table/DataTable";
@@ -38,7 +38,35 @@ const CategoryPage = () => {
     dispatch(fetchCategory());
   }, [dispatch]);
 
-  console.log(categories);
+  const rows = categories.map((item) => ({
+    ...item,
+    id: item.category_id,
+  }));
+
+  const columns = [
+    {
+      field: "category_id",
+      headerName: "ID",
+      width: 100,
+    },
+    {
+      field: "category_name",
+      headerName: "Category Name",
+      width: 200,
+    },
+    {
+      field: "category_image",
+      headerName: "Category Image",
+      width: 200,
+    },
+    {
+      field: "description",
+      headerName: "Description",
+      width: 200,
+    },
+  ];
+
+  console.log("categories", categories);
 
   return (
     <Box id="categoryPage" sx={boxStyle}>
@@ -49,51 +77,7 @@ const CategoryPage = () => {
           </Typography>
         </Grid>
         <Grid item sm={12}>
-          <DataGridComponent
-            rows={[
-              {
-                id: 1,
-                category_id: 1,
-                category_name: "Vodka",
-                category_image: "vodka.jpg",
-                description: "Vodka is a clear distilled alcoholic beverage",
-              },
-            ]}
-            columns={[
-              {
-                field: "category_id",
-                headerName: "ID",
-                width: 100,
-              },
-              {
-                field: "category_name",
-                headerName: "Category Name",
-                width: 200,
-              },
-              {
-                field: "category_image",
-                headerName: "Category Image",
-                width: 200,
-              },
-              {
-                field: "description",
-                headerName: "Description",
-                width: 200,
-              },
-            ]}
-          />
-          {/* <FormControl sx={formControlStyle}>
-            <InputLabel id="demo-simple-select-label">
-              select category
-            </InputLabel>
-            <Select defaultValue={"Vodka"} label={"select category"}>
-              {categories.map((item) => (
-                <MenuItem key={item.category_id} value={item.category_id}>
-                  {item.category_name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
+          <DataGridComponent rows={rows} columns={columns} />
         </Grid>
       </Grid>
     </Box>

@@ -43,30 +43,39 @@ const DataGridComponent: React.FC<DataGridProps> = ({ rows, columns }) => {
   const handleSaveChanges = () => {
     if (editedRow) {
       // Perform save operation for edited row
-      console.log("Save changes:", editedRow);
+      // remove id field in editedRow
+      const { id, ...editedRowWithoutId } = editedRow;
+      console.log("Save Changes", editedRowWithoutId);
     }
     handleCloseModal();
   };
 
   const handleAddRow = () => {
-    // Perform add operation for new row
+    // open the modal
+    setIsModalOpen(true);
+    // set the edited row to null
+    setEditedRow(null);
+    // set the selected row to null
+    setSelectedRow(null);
+    // log the action
     console.log("Add new row");
   };
 
-  const handleCellEditCommit = (params: GridCellParams) => {
-    const { id, field, value } = params;
-    setEditedRow((prevRow) => {
-      if (prevRow && prevRow.id === id) {
-        return { ...prevRow, [field]: value };
-      }
-      return prevRow;
-    });
-  };
+  // const handleCellEditCommit = (params: GridCellParams) => {
+  //   console.log("params", params);
+  //   const { id, field, value } = params;
+  //   setEditedRow((prevRow) => {
+  //     if (prevRow && prevRow.id === id) {
+  //       return { ...prevRow, [field]: value };
+  //     }
+  //     return prevRow;
+  //   });
+  // };
 
   return (
     <Box height={400} width="100%">
       <Button variant="contained" onClick={handleAddRow} sx={{ mb: 2 }}>
-        Add Row
+        Add New
       </Button>
 
       <DataGrid
@@ -96,10 +105,11 @@ const DataGridComponent: React.FC<DataGridProps> = ({ rows, columns }) => {
           },
         ]}
         autoHeight
-        onCellEditCommit={handleCellEditCommit}
+        // onCellEditCommit={handleCellEditCommit}
       />
 
       <ModalComponent
+        columns={columns}
         isModalOpen={isModalOpen}
         setEditedRow={setEditedRow}
         handleCloseModal={handleCloseModal}
