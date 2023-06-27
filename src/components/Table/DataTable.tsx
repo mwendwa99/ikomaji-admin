@@ -79,7 +79,11 @@ const DataGridComponent: React.FC<DataGridProps> = ({
 
   return (
     <Box height={400} width="100%">
-      <Button variant="contained" onClick={handleAddRow} sx={{ mb: 2 }}>
+      <Button
+        variant="contained"
+        onClick={handleAddRow}
+        sx={{ mb: 2, bgcolor: "#46de99" }}
+      >
         Add New
       </Button>
 
