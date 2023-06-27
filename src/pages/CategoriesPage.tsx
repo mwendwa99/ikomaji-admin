@@ -77,7 +77,7 @@ const CategoryPage = () => {
           </Typography>
         </Grid>
         <Grid item sm={12}>
-          <DataGridComponent rows={rows} columns={columns} />
+          <DataGridComponent type="category" rows={rows} columns={columns} />
         </Grid>
       </Grid>
     </Box>

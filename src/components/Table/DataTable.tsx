@@ -14,11 +14,16 @@ import ModalComponent from "../Modal/Modal";
 type RowData = Record<string, any>;
 
 interface DataGridProps {
+  type: string;
   rows: GridRowData[];
   columns: GridColDef[];
 }
 
-const DataGridComponent: React.FC<DataGridProps> = ({ rows, columns }) => {
+const DataGridComponent: React.FC<DataGridProps> = ({
+  type,
+  rows,
+  columns,
+}) => {
   const [selectedRow, setSelectedRow] = useState<RowData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editedRow, setEditedRow] = useState<RowData | null>(null);
@@ -109,6 +114,7 @@ const DataGridComponent: React.FC<DataGridProps> = ({ rows, columns }) => {
       />
 
       <ModalComponent
+        type={type}
         columns={columns}
         isModalOpen={isModalOpen}
         setEditedRow={setEditedRow}

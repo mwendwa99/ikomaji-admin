@@ -15,6 +15,7 @@ import { GridColDef } from "@mui/x-data-grid";
 type RowData = Record<string, any>;
 
 interface ModalComponentProps {
+  type: string;
   columns: GridColDef[];
   isModalOpen: boolean;
   selectedRow: RowData | null;
@@ -25,6 +26,7 @@ interface ModalComponentProps {
 }
 
 const ModalComponent: FC<ModalComponentProps> = ({
+  type,
   columns,
   isModalOpen,
   selectedRow,
@@ -33,7 +35,7 @@ const ModalComponent: FC<ModalComponentProps> = ({
   handleCloseModal,
   handleSaveChanges,
 }) => {
-  // console.log("selectedRow", selectedRow);
+  console.log("selectedRow", selectedRow);
   // console.log("editedRow", editedRow);
 
   return (
@@ -48,76 +50,47 @@ const ModalComponent: FC<ModalComponentProps> = ({
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
+            borderRadius: 5,
           }}
         >
           {!selectedRow && (
             <>
-              <Typography variant="h5">New category</Typography>
+              <Typography variant="h5">New {type}</Typography>
               {/* add columns to input data */}
-              {columns.map(
-                (column) =>
-                  column.field !== "category_id" && (
+              {columns.map((column) => {
+                if (column.field !== `${type}_id`) {
+                  const isImageField = column.field === `${type}_image`;
+                  const label = isImageField ? "" : column.field;
+                  const value = editedRow ? editedRow[column.field] : "";
+
+                  return (
                     <Box key={column.field} mb={2}>
                       <TextField
+                        fullWidth
                         variant="filled"
-                        label={
-                          column.field === "category_image"
-                            ? "Image"
-                            : column.field
-                        }
-                        // label={column.headerName}
-                        value={editedRow ? editedRow[column.field] : ""}
+                        label={label}
+                        value={value}
                         onChange={(e) =>
                           setEditedRow((prevRow) => ({
                             ...prevRow,
                             [column.field]: e.target.value,
                           }))
                         }
-                        // style={{
-                        //   display:
-                        //     column.field === "category_image"
-                        //       ? "none"
-                        //       : undefined,
-                        // }}
                         required
-                        type={
-                          column.field === "category_image" ? "file" : "text"
-                        }
+                        type={isImageField ? "file" : "text"}
                         InputLabelProps={{ shrink: true }}
                         InputProps={{
                           inputProps: {
-                            accept:
-                              column.field === "category_image"
-                                ? "image/*"
-                                : undefined,
-                            "aria-label":
-                              column.field === "category_image"
-                                ? "Upload image"
-                                : undefined,
+                            accept: isImageField ? "image/*" : undefined,
                           },
-                          startAdornment:
-                            column.field === "category_image" ? (
-                              <InputAdornment position="start">
-                                <CloudUpload />
-                              </InputAdornment>
-                            ) : undefined,
-                          endAdornment:
-                            column.field === "category_image" ? (
-                              <InputAdornment position="end">
-                                <Button color="primary" component="label">
-                                  Upload Image
-                                  <input
-                                    type="file"
-                                    style={{ display: "none" }}
-                                  />
-                                </Button>
-                              </InputAdornment>
-                            ) : undefined,
                         }}
                       />
                     </Box>
-                  )
-              )}
+                  );
+                }
+
+                return null;
+              })}
 
               <Button
                 variant="contained"
@@ -134,25 +107,34 @@ const ModalComponent: FC<ModalComponentProps> = ({
 
           {selectedRow && (
             <>
-              <Typography variant="h5">Edit Row</Typography>
+              <Typography variant="h5">Edit {type}</Typography>
               {Object.keys(selectedRow).map((field) => (
-                <Box key={field} mb={2}>
-                  {/* if field is category_id or id dont show */}
-                  {field !== "category_id" && field !== "id" && (
-                    <TextField
-                      variant="filled"
-                      label={field === "category_image" ? "Image" : field}
-                      value={editedRow?.[field] || ""}
-                      onChange={(e) =>
-                        setEditedRow((prevRow) => ({
-                          ...prevRow,
-                          [field]: e.target.value,
-                        }))
-                      }
-                      type={field === "category_image" ? "file" : "text"}
-                    />
-                  )}
-                </Box>
+                <>
+                  <Box key={field} mb={2}>
+                    {field !== `${type}_id` && field !== "id" && (
+                      <TextField
+                        fullWidth
+                        variant="filled"
+                        label={field === `${type}_image` ? "" : field}
+                        value={editedRow?.[field] || ""}
+                        onChange={(e) =>
+                          setEditedRow((prevRow) => ({
+                            ...prevRow,
+                            [field]: e.target.value,
+                          }))
+                        }
+                        type={field === `${type}_image` ? "file" : "text"}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{
+                          inputProps: {
+                            accept:
+                              field === `${type}_image` ? "image/*" : undefined,
+                          },
+                        }}
+                      />
+                    )}
+                  </Box>
+                </>
               ))}
               <Button
                 variant="contained"
