@@ -73,29 +73,27 @@ const ModalComponent: FC<ModalComponentProps> = ({
                     const value = editedRow ? editedRow[column.field] : "";
 
                     return (
-                      <Grid item md={6}>
-                        <Box key={column.field} mb={2}>
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            label={label}
-                            value={value}
-                            onChange={(e) =>
-                              setEditedRow((prevRow) => ({
-                                ...prevRow,
-                                [column.field]: e.target.value,
-                              }))
-                            }
-                            required
-                            type={isImageField ? "file" : "text"}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              inputProps: {
-                                accept: isImageField ? "image/*" : undefined,
-                              },
-                            }}
-                          />
-                        </Box>
+                      <Grid key={column.field} item md={6}>
+                        <TextField
+                          fullWidth
+                          variant="outlined"
+                          label={label}
+                          value={value}
+                          onChange={(e) =>
+                            setEditedRow((prevRow) => ({
+                              ...prevRow,
+                              [column.field]: e.target.value,
+                            }))
+                          }
+                          required
+                          type={isImageField ? "file" : "text"}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            inputProps: {
+                              accept: isImageField ? "image/*" : undefined,
+                            },
+                          }}
+                        />
                       </Grid>
                     );
                   }
@@ -125,41 +123,37 @@ const ModalComponent: FC<ModalComponentProps> = ({
                 Edit {type}
               </Typography>
               <Grid container spacing={2}>
-                {Object.keys(selectedRow).map((field) => (
-                  <>
-                    {/* <Box key={field} mb={2}> */}
-                    <Grid item key={field} md={6}>
-                      {field !== `${type}_id` &&
-                        field !== "id" &&
-                        field !== "category_id" &&
-                        field !== "category" &&
-                        field !== "created_at" && (
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            label={field === `${type}_image` ? "" : field}
-                            value={editedRow?.[field] || ""}
-                            onChange={(e) =>
-                              setEditedRow((prevRow) => ({
-                                ...prevRow,
-                                [field]: e.target.value,
-                              }))
-                            }
-                            type={field === `${type}_image` ? "file" : "text"}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              inputProps: {
-                                accept:
-                                  field === `${type}_image`
-                                    ? "image/*"
-                                    : undefined,
-                              },
-                            }}
-                          />
-                        )}
-                    </Grid>
-                    {/* </Box> */}
-                  </>
+                {Object.keys(selectedRow).map((field, index) => (
+                  <Grid item key={index} md={6}>
+                    {field !== `${type}_id` &&
+                      field !== "id" &&
+                      field !== "category_id" &&
+                      field !== "category" &&
+                      field !== "created_at" && (
+                        <TextField
+                          fullWidth
+                          variant="outlined"
+                          label={field === `${type}_image` ? "" : field}
+                          value={editedRow?.[field] || ""}
+                          onChange={(e) =>
+                            setEditedRow((prevRow) => ({
+                              ...prevRow,
+                              [field]: e.target.value,
+                            }))
+                          }
+                          type={field === `${type}_image` ? "file" : "text"}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            inputProps: {
+                              accept:
+                                field === `${type}_image`
+                                  ? "image/*"
+                                  : undefined,
+                            },
+                          }}
+                        />
+                      )}
+                  </Grid>
                 ))}
                 <Grid item md={12}>
                   <Button

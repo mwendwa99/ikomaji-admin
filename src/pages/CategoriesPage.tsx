@@ -9,6 +9,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   Typography,
 } from "@mui/material";
@@ -69,48 +70,23 @@ const CategoryPage = () => {
   console.log("categories", categories);
 
   return (
-    <Box id="categoryPage" sx={boxStyle}>
-      <Grid container>
-        <Grid item sm={12}>
-          <Typography variant="h4" component="h4" sx={titleStyle}>
-            Categories
-          </Typography>
-        </Grid>
-        <Grid item sm={12}>
+    <Grid container sx={{ height: "100%" }}>
+      <Grid item sm={12}>
+        <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
+          Categories
+        </Typography>
+        <Paper elevation={0} sx={chartStyle}>
           <DataGridComponent type="category" rows={rows} columns={columns} />
-        </Grid>
+        </Paper>
       </Grid>
-    </Box>
+    </Grid>
   );
 };
 
 export default CategoryPage;
 
-const boxStyle = {
-  width: "100%",
-  height: "100%",
-  padding: "1rem",
-  backgroundColor: "#fff",
-  borderRadius: "0.5rem",
-  border: "1px solid #ddd",
-};
-
-const titleStyle = {
-  fontWeight: "bold",
-  marginBottom: "1rem",
-};
-
-const formControlStyle = {
-  minWidth: "100%",
-  marginBottom: "1rem",
-  "& select": {
-    width: "100%",
-    padding: "0.5rem",
-    border: "1px solid #ddd",
-    borderRadius: "0.5rem",
-    outline: "none",
-    "&:focus": {
-      border: "1px solid #000",
-    },
-  },
+const chartStyle = {
+  m: 1,
+  p: 1,
+  border: "1px solid #E5E5E5",
 };
