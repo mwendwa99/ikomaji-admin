@@ -11,6 +11,7 @@ import GridChart from "../components/Chart/GridChart";
 import DataGrid from "../components/Table/DataGrid";
 import List from "../components/List/List";
 import Card from "../components/Card/Card";
+import DataGridComponent from "../components/Grid/DataGridComponent";
 
 interface AppData {
   dashboard: CardData[];
@@ -82,11 +83,15 @@ export default function DashboardPage({
   return (
     <Grid container>
       <Grid item sm={12}>
+        <DataGridComponent />
+      </Grid>
+
+      {/* <Grid item sm={12}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Dashboard
         </Typography>
         <Dashboard />
-      </Grid>
+      </Grid> */}
       {/* <Grid item sm={5}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Income Overview
@@ -95,7 +100,7 @@ export default function DashboardPage({
           <BarChart data={appData.income} valueSum={valueSum} />
         </Paper>
       </Grid> */}
-      <Grid item sm={7}>
+      {/* <Grid item sm={7}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Analytics Report
         </Typography>
@@ -118,7 +123,7 @@ export default function DashboardPage({
         <Paper elevation={0} sx={chartStyle}>
           <List transactions={appData.transactions} />
         </Paper>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }
