@@ -67,7 +67,7 @@ const CategoryPage = () => {
     },
   ];
 
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
   return (
     <Grid container sx={{ height: "100%" }}>

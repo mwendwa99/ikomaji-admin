@@ -16,7 +16,7 @@ export default function InventoryPage() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  console.log("products", products);
+  // console.log("products", products);
 
   const columns = [
     {

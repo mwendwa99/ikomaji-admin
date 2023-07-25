@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchOrders } from "../redux/orders/orderActions";
 
 import GridChart from "../components/Chart/GridChart";
-import BarChart from "../components/Chart/BarChart";
+// import BarChart from "../components/Chart/BarChart";
 import DataGrid from "../components/Table/DataGrid";
 import List from "../components/List/List";
 import Card from "../components/Card/Card";
@@ -65,8 +65,8 @@ function Dashboard() {
 
 export default function DashboardPage({
   appData,
-  valueSum,
-}: {
+}: // valueSum,
+{
   appData: AppData;
   valueSum: number;
 }) {
@@ -87,14 +87,14 @@ export default function DashboardPage({
         </Typography>
         <Dashboard />
       </Grid>
-      <Grid item sm={5}>
+      {/* <Grid item sm={5}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Income Overview
         </Typography>
         <Paper elevation={0} sx={chartStyle}>
           <BarChart data={appData.income} valueSum={valueSum} />
         </Paper>
-      </Grid>
+      </Grid> */}
       <Grid item sm={7}>
         <Typography variant="body1" sx={{ fontWeight: "bold", marginLeft: 1 }}>
           Analytics Report

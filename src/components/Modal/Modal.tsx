@@ -36,7 +36,7 @@ const ModalComponent: FC<ModalComponentProps> = ({
   handleCloseModal,
   handleSaveChanges,
 }) => {
-  console.log("selectedRow", selectedRow);
+  // console.log("selectedRow", selectedRow);
   // console.log("editedRow", editedRow);
 
   return (
