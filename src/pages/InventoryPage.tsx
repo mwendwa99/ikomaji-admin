@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchProducts } from "../redux/productSlice";
+import { fetchProducts } from "../redux/products/productActions";
 
 import InventoryGrid from "../components/Table/InventoryGrid";
 import DataGrid from "../components/Table/DataTable";

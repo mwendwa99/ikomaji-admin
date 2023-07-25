@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { orderSlice } from "./orderSlice";
-import { productSlice } from "./productSlice";
-import { categorySlice } from "./categorySlice";
+import orderSlice from "./orders/orderSlice";
+import productSlice from "./products/productSlice";
+import categorySlice from "./categories/categorySlice";
 
 export const store = configureStore({
   reducer: {
     // ...
-    products: productSlice.reducer,
-    orders: orderSlice.reducer,
-    categories: categorySlice.reducer,
+    products: productSlice,
+    orders: orderSlice,
+    categories: categorySlice,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

@@ -4,7 +4,7 @@ import { Grid, Paper, Typography, Box } from "@mui/material";
 
 import { DefaultAppContext } from "../context/DefaultAppContext";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchOrders } from "../redux/orderSlice";
+import { fetchOrders } from "../redux/orders/orderActions";
 
 import GridChart from "../components/Chart/GridChart";
 import BarChart from "../components/Chart/BarChart";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchCategory } from "../redux/categorySlice";
+import { fetchCategory } from "../redux/categories/categoryActions";
 
 import {
   Box,
