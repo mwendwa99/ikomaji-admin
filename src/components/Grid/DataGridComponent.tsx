@@ -1,89 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DataGrid,
   GridColDef,
   GridValueGetterParams,
   GridToolbar,
-  GridToolbarContainer,
-  GridToolbarFilterButton,
-  GridToolbarColumnsButton,
-  GridToolbarExport,
-  GridCellParams,
 } from "@mui/x-data-grid";
+
 import {
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   FormControl,
-  InputLabel,
   IconButton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import EditIcon from "../../assets/icons/EditIcon";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { fetchOrders } from "../../redux/orders/orderActions";
+
 import DeleteIcon from "../../assets/icons/DeleteIcon";
+import ExpandIcon from "../../assets/icons/ExpandIcon";
 
-// Sample data for the dropdown table
-const sampleDropdownData = [
-  {
-    id: 1,
-    name: "Item 1",
-    category: "Category A",
-    quantity: 10,
-    netValue: 100,
-    grossValue: 120,
-  },
-  {
-    id: 2,
-    name: "Item 2",
-    category: "Category B",
-    quantity: 15,
-    netValue: 150,
-    grossValue: 180,
-  },
-  // Add more data here
-];
-
-// Sample data for the main DataGrid
-const sampleData = [
-  {
-    id: 1,
-    status: "Pending",
-    orderDate: "2023-07-20",
-    deliveryDate: "2023-07-25",
-    orderNumber: "ORD123",
-    documentNumber: "DOC456",
-    paymentDate: "2023-07-30",
-    totalAmount: 500,
-  },
-  // Add more data here
-];
+interface OrdersProps {
+  orders: object[];
+  loading: boolean;
+}
 
 const DataGridComponent: React.FC = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const [dropDownTitle, setDropDownTitle] = useState<string>("");
+  const [ordersData, setOrdersData] = useState<object[]>([]);
+  const [dropdownData, setDropdownData] = useState<object[]>([]);
+  const dispatch = useAppDispatch();
+  const { orders, loading } = useAppSelector<OrdersProps>(
+    (state) => state.orders
+  );
 
-  const handleRowClick = (params: GridValueGetterParams) => {
+  useEffect(() => {
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (orders) {
+      setOrdersData([
+        ...orders.map((order: any) => {
+          return {
+            ...order,
+            orderDate: order.orderDate
+              .slice(0, 10)
+              .split("-")
+              .reverse()
+              .join("/"),
+            deliveryDate: order.deliveryDate
+              .slice(0, 10)
+              .split("-")
+              .reverse()
+              .join("/"),
+            products: order.products,
+          };
+        }),
+      ]);
+    }
+  }, [orders]);
+
+  useEffect(() => {
+    if (ordersData.length > 0) {
+      const updatedDropdownData = ordersData.flatMap((order) => order.products);
+      setDropdownData(updatedDropdownData);
+    }
+  }, [ordersData]);
+
+  const handleExpand = (params: GridValueGetterParams) => {
     setOpenRow((prev) => (prev === params.row.id ? null : params.row.id));
     setDropDownTitle(params.row.orderNumber);
-  };
-
-  const handleDownload = (id: number) => {
-    // Handle download logic here
-    console.log("Download", id);
-  };
-
-  const handleEdit = (id: number) => {
-    // Handle edit logic here
-    console.log("Edit", id);
   };
 
   const handleDelete = (id: number) => {
@@ -93,20 +81,21 @@ const DataGridComponent: React.FC = () => {
 
   const columns: GridColDef[] = [
     { field: "status", headerName: "Status", width: 100 },
-    { field: "orderDate", headerName: "Order Date", width: 100 },
-    { field: "deliveryDate", headerName: "Delivered", width: 100 },
-    { field: "orderNumber", headerName: "Order", width: 100 },
-    { field: "documentNumber", headerName: "Document", width: 100 },
-    { field: "paymentDate", headerName: "Paid", width: 100 },
+    { field: "orderDate", headerName: "Order Date", width: 120 },
+    { field: "orderNumber", headerName: "Order Number", width: 100 },
+    { field: "documentNumber", headerName: "Document", width: 120 },
+    { field: "paymentDate", headerName: "Payment Date", width: 120 },
+    { field: "deliveryDate", headerName: "Deliver Date", width: 120 },
     { field: "totalAmount", headerName: "Total", width: 100 },
     {
       field: "actions",
       headerName: "Actions",
-      width: 200,
+      headerAlign: "center",
+      width: 100,
       renderCell: (params: GridValueGetterParams) => (
         <>
-          <IconButton size="small" onClick={() => handleEdit(params.row.id)}>
-            <EditIcon />
+          <IconButton size="small" onClick={() => handleExpand(params)}>
+            <ExpandIcon />
           </IconButton>
           <IconButton size="small" onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
@@ -116,22 +105,54 @@ const DataGridComponent: React.FC = () => {
     },
   ];
 
-  const expandedColumns = [
-    { field: "id", headerName: "No", width: 100 },
-    { field: "name", headerName: "Name", width: 100 },
-    { field: "category", headerName: "Category", width: 100 },
+  const dropDownColumns = [
+    {
+      field: "name",
+      headerName: "Name",
+      width: 100,
+      renderCell: (params: GridValueGetterParams) => {
+        // Map over the products array and create a list of product names and categories
+        const name = params.row.product.name;
+        return <div>{name}</div>;
+      },
+    },
+    {
+      field: "category",
+      headerName: "Category",
+      width: 100,
+      renderCell: (params: GridValueGetterParams) => {
+        // Map over the products array and create a list of product names and categories
+        const name = params.row.product.category.name;
+        return <div>{name}</div>;
+      },
+    },
     { field: "quantity", headerName: "Quantity", width: 100 },
-    { field: "netValue", headerName: "Net Value", width: 100 },
-    { field: "grossValue", headerName: "Gross Value", width: 100 },
+    {
+      field: "netValue",
+      headerName: "Unit Value",
+      width: 100,
+      renderCell: (params: GridValueGetterParams) => {
+        // Map over the products array and create a list of product names and categories
+        const name = params.row.product.price;
+        return <div>{name}</div>;
+      },
+    },
+    {
+      field: "grossValue",
+      headerName: "Total Value",
+      width: 100,
+      renderCell: (params: GridValueGetterParams) => {
+        // Map over the products array and create a list of product names and categories
+        const name = params.row.product.price * params.row.quantity;
+        return <div>{name}</div>;
+      },
+    },
     {
       field: "actions",
       headerName: "Actions",
-      width: 200,
+      width: 100,
       renderCell: (params: GridValueGetterParams) => (
         <>
-          <IconButton size="small" onClick={() => handleEdit(params.row.id)}>
-            <EditIcon />
-          </IconButton>
           <IconButton size="small" onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
@@ -144,17 +165,13 @@ const DataGridComponent: React.FC = () => {
     <>
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={sampleData}
+          rows={ordersData}
           columns={columns}
-          pageSize={5}
+          pagination
+          autoPageSize
+          disableRowSelectionOnClick
           slots={{
             toolbar: GridToolbar,
-          }}
-          onCellClick={(params: GridCellParams) => {
-            if (params.field === "actions") {
-              return false;
-            }
-            handleRowClick(params);
           }}
         />
       </div>
@@ -165,10 +182,10 @@ const DataGridComponent: React.FC = () => {
           fullWidth
           maxWidth="md"
         >
-          <DialogTitle>{dropDownTitle}</DialogTitle>
+          <DialogTitle>Order {dropDownTitle}</DialogTitle>
           <DialogContent>
             {openRow && (
-              <DataGrid rows={sampleDropdownData} columns={expandedColumns} />
+              <DataGrid rows={dropdownData} columns={dropDownColumns} />
             )}
           </DialogContent>
         </Dialog>

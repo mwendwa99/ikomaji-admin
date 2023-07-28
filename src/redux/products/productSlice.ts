@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts, addProduct } from "./productActions";
+import { fetchProducts, addProduct, fetchProductById } from "./productActions";
 
 interface ProductState {
   products: [];
@@ -51,6 +51,17 @@ export const productSlice = createSlice({
         state.loading = false;
       })
       .addCase(addProduct.rejected, (state, action) => {
+        state.error = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(fetchProductById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchProductById.fulfilled, (state, action) => {
+        state.products = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(fetchProductById.rejected, (state, action) => {
         state.error = action.payload as any;
         state.loading = false;
       });

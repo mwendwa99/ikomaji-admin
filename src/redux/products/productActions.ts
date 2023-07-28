@@ -24,6 +24,29 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const fetchProductById = createAsyncThunk(
+  "orders/fetchProductById",
+  async (id: string, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      const response = await fetch(`http://localhost:3000/api/product/${id}`);
+      const data = await response.json();
+      dispatch(setProducts(data));
+      dispatch(setLoading(false));
+    } catch (error: any) {
+      dispatch(
+        setError({
+          message: error.message,
+          status: error.status,
+          origin: "fetchProductById",
+        })
+      );
+      dispatch(setLoading(false));
+    }
+  }
+);
+
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (product, { dispatch }) => {

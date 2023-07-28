@@ -7,7 +7,7 @@ export const fetchOrders = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/orders");
+      const response = await fetch("http://localhost:3000/api/orders");
       const data = await response.json();
       dispatch(setOrders(data));
       dispatch(setLoading(false));
@@ -17,6 +17,29 @@ export const fetchOrders = createAsyncThunk(
           message: error.message,
           status: error.status,
           origin: "fetchOrders",
+        })
+      );
+      dispatch(setLoading(false));
+    }
+  }
+);
+
+export const fetchOrderById = createAsyncThunk(
+  "orders/fetchOrderById",
+  async (id: string, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      const response = await fetch(`http://localhost:3000/api/order/${id}`);
+      const data = await response.json();
+      dispatch(setOrders(data));
+      dispatch(setLoading(false));
+    } catch (error: any) {
+      dispatch(
+        setError({
+          message: error.message,
+          status: error.status,
+          origin: "fetchOrderById",
         })
       );
       dispatch(setLoading(false));
