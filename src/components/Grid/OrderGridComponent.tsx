@@ -26,7 +26,7 @@ interface OrdersProps {
   loading: boolean;
 }
 
-const DataGridComponent: React.FC = () => {
+const OrderGridComponent: React.FC = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const [dropDownTitle, setDropDownTitle] = useState<string>("");
   const [ordersData, setOrdersData] = useState<object[]>([]);
@@ -153,18 +153,6 @@ const DataGridComponent: React.FC = () => {
         return <div>{name}</div>;
       },
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 100,
-      renderCell: (params: GridValueGetterParams) => (
-        <>
-          <IconButton size="small" onClick={() => handleDelete(params.row.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </>
-      ),
-    },
   ];
 
   if (loading) {
@@ -205,4 +193,4 @@ const DataGridComponent: React.FC = () => {
   );
 };
 
-export default DataGridComponent;
+export default OrderGridComponent;

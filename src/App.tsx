@@ -67,6 +67,7 @@ function App() {
 export default App;
 
 const containerStyle = {
+  flex: 1,
   backgroundColor: "#fafafb",
   height: "100%",
 };

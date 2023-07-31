@@ -75,3 +75,26 @@ export const addProduct = createAsyncThunk(
     }
   }
 );
+
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id: string, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      await fetch(`http://localhost:3000/products/${id}`, {
+        method: "DELETE",
+      });
+      dispatch(fetchProducts());
+    } catch (error: any) {
+      dispatch(
+        setError({
+          message: error.message,
+          status: error.status,
+          origin: "deleteProduct",
+        })
+      );
+      dispatch(setLoading(false));
+    }
+  }
+);

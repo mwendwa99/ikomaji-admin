@@ -11,7 +11,7 @@ import GridChart from "../components/Chart/GridChart";
 import DataGrid from "../components/Table/DataGrid";
 import List from "../components/List/List";
 import Card from "../components/Card/Card";
-import DataGridComponent from "../components/Grid/DataGridComponent";
+import OrderGridComponent from "../components/Grid/OrderGridComponent";
 
 interface AppData {
   dashboard: CardData[];
@@ -81,9 +81,9 @@ export default function DashboardPage({
   }, [dispatch]);
 
   return (
-    <Grid container>
+    <Grid container sx={{ flex: 1, height: "100%" }}>
       <Grid item sm={12}>
-        <DataGridComponent />
+        <OrderGridComponent />
       </Grid>
 
       {/* <Grid item sm={12}>
