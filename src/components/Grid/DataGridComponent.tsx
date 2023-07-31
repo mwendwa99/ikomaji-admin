@@ -12,10 +12,11 @@ import {
   DialogContent,
   FormControl,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { fetchOrders } from "../../redux/orders/orderActions";
+import { fetchOrders, deleteOrder } from "../../redux/orders/orderActions";
 
 import DeleteIcon from "../../assets/icons/DeleteIcon";
 import ExpandIcon from "../../assets/icons/ExpandIcon";
@@ -81,7 +82,7 @@ const DataGridComponent: React.FC = () => {
 
   const handleDelete = (id: number) => {
     // Handle delete logic here
-    console.log("Delete", id);
+    dispatch(deleteOrder(id));
   };
 
   const columns: GridColDef[] = [
@@ -165,6 +166,11 @@ const DataGridComponent: React.FC = () => {
       ),
     },
   ];
+
+  if (loading) {
+    // Show a loading indicator or message while fetching data
+    return <CircularProgress />;
+  }
 
   return (
     <>

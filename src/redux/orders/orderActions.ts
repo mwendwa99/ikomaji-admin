@@ -46,3 +46,26 @@ export const fetchOrderById = createAsyncThunk(
     }
   }
 );
+
+export const deleteOrder = createAsyncThunk(
+  "orders/deleteOrder",
+  async (id: string, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      await fetch(`http://localhost:3000/api/order/${id}`, {
+        method: "DELETE",
+      });
+      dispatch(fetchOrders());
+    } catch (error: any) {
+      dispatch(
+        setError({
+          message: error.message,
+          status: error.status,
+          origin: "deleteOrder",
+        })
+      );
+      dispatch(setLoading(false));
+    }
+  }
+);

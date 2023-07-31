@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchOrders, fetchOrderById } from "./orderActions";
+import { fetchOrders, fetchOrderById, deleteOrder } from "./orderActions";
 
 interface OrderState {
   orders: [];
@@ -51,6 +51,17 @@ export const orderSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchOrderById.rejected, (state, action) => {
+        state.error = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(deleteOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteOrder.fulfilled, (state, action) => {
+        state.orders = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(deleteOrder.rejected, (state, action) => {
         state.error = action.payload as any;
         state.loading = false;
       });
