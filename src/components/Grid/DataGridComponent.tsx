@@ -70,8 +70,13 @@ const DataGridComponent: React.FC = () => {
   }, [ordersData]);
 
   const handleExpand = (params: GridValueGetterParams) => {
-    setOpenRow((prev) => (prev === params.row.id ? null : params.row.id));
-    setDropDownTitle(params.row.orderNumber);
+    //check whether products exist
+    if (params.row.products.length > 0) {
+      setOpenRow((prev) => (prev === params.row.id ? null : params.row.id));
+      setDropDownTitle(params.row.orderNumber);
+    } else {
+      alert("No products in this order");
+    }
   };
 
   const handleDelete = (id: number) => {
