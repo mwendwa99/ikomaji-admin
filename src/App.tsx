@@ -1,6 +1,5 @@
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 
-import { DefaultAppContext } from "./context/DefaultAppContext";
 import { DrawerContext } from "./context/DrawerContext";
 import "./App.css";
 
@@ -14,14 +13,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import Drawer from "./components/Drawer/Drawer";
 
 function App() {
-  const appData = useContext(DefaultAppContext);
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
-
-  const valueSum = useMemo(() => {
-    return appData.dashboard.reduce((acc, item) => {
-      return acc + item.value;
-    }, 0);
-  }, [appData.dashboard]);
 
   switch (selectedPage) {
     case "Dashboard":
@@ -29,7 +21,7 @@ function App() {
         <div style={containerStyle}>
           <CssBaseline />
           <Drawer handleSelectedPage={handleSelectedPage}>
-            <DashboardPage appData={appData} valueSum={valueSum} />
+            <DashboardPage />
           </Drawer>
           <Box id="historyList"></Box>
         </div>
