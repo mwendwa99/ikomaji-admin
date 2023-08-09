@@ -56,3 +56,30 @@ export const theme = createTheme({
     // },
   },
 });
+
+export const tableTheme = {
+  BaseRow: `
+    font-size: 14px;
+  `,
+  HeaderRow: `
+    background-color: #B9FFDF;
+  `,
+  Row: `
+    &:nth-child(odd) {
+      background-color: #fafafa;
+    }
+
+    &:nth-child(even) {
+      background-color: #fefefe;
+    }
+
+    word-wrap: break-word;
+  `,
+  Cell: `
+    padding: 10px;
+    word-wrap: break-word;
+  `,
+  HeaderCell: `
+    padding: 10px;
+    `,
+};
