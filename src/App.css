@@ -1,0 +1,19 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+th {
+  background-color: #b9ffdf;
+  position: sticky;
+  padding: 10px;
+  text-align: left;
+  /* overflow-wrap: break-word; */
+  /* word-break: normal; */
+  /* word-break: break-all; */
+}
+tr {
+  border: 1px solid #ddd;
+  text-align: left;
+  /* padding: 10px !important; */
+}

@@ -39,21 +39,6 @@ export const theme = createTheme({
         },
       },
     },
-    // MuiIconButton: {
-    //   styleOverrides: {
-    //     root: {
-    //       width: "30px",
-    //       height: "30px",
-    //       color: "#46DF99",
-    //       padding: "10px",
-    //       backgroundColor: "#93f4c8",
-    //       "&:hover": {
-    //         backgroundColor: "#46DF99",
-    //         color: "#FFFFFF",
-    //       },
-    //     },
-    //   },
-    // },
   },
 });
 
@@ -63,21 +48,21 @@ export const tableTheme = {
   `,
   HeaderRow: `
     background-color: #B9FFDF;
+    position: sticky;
+
   `,
   Row: `
-    &:nth-child(odd) {
+    &:nth-of-type(odd) {
       background-color: #fafafa;
-    }
-
-    &:nth-child(even) {
+    };
+    &:nth-of-type(even) {
       background-color: #fefefe;
-    }
-
-    word-wrap: break-word;
+    };
+    overflow-wrap: break-word;
   `,
   Cell: `
     padding: 10px;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   `,
   HeaderCell: `
     padding: 10px;
