@@ -1,5 +1,5 @@
-import { useState, useEffect, Fragment } from "react";
-import { IconButton, CircularProgress, Container } from "@mui/material";
+import { useState, useEffect, Fragment, useMemo } from "react";
+import { IconButton, CircularProgress, Box } from "@mui/material";
 import {
   Table,
   Header,
@@ -32,29 +32,43 @@ interface OrderProps {
   error: string | null;
 }
 
-const NestedTable = ({ products }: any) => {
+const NestedTable = ({ products, customer }: any) => {
+  // memoized function to calculate total price
+  const totalPrice = useMemo(() => {
+    return (products: any) => {
+      return Math.ceil(
+        products.reduce(
+          (acc: any, product: any) =>
+            acc + product.product.price * product.quantity,
+          0
+        )
+      );
+    };
+  }, []);
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>
-            Quantity
-            <br /> Ordered
-          </th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {products.map((product: any) => (
-          <tr key={product.id}>
-            <td>{product.product.name}</td>
-            <td>{product.quantity}</td>
-            <td>{product.price}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <tr style={{ display: "flex", flexDirection: "row", gridColumn: "1 / -1" }}>
+      <td style={{ display: "flex", flexDirection: "column" }}>
+        <h5>Customer Details</h5>
+        <p>name: {customer.name}</p>
+        <p>email: {customer.email}</p>
+        <p>city: {customer.city}</p>
+      </td>
+      <td style={{ display: "flex", flexDirection: "column" }}>
+        <h5>Orders</h5>
+        <ul>
+          {products?.map((product: any) => (
+            <li key={product.id}>
+              <p style={{ flex: "1" }}>
+                {product?.quantity} bottles of {product?.product.name} @{" "}
+                {product?.product.price}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <h5>TOTAL: {totalPrice(products)} </h5>
+      </td>
+    </tr>
   );
 };
 
@@ -62,12 +76,9 @@ const OrderGridComponent = () => {
   const dispatch = useAppDispatch();
   const [orderData, setOrderData] = useState<object[]>([]);
   const [isExpand, setIsExpand] = useState<boolean>(false);
-  const { orders, loading, error } = useAppSelector<OrderProps>(
+  const { orders, loading } = useAppSelector<OrderProps>(
     (state) => state.orders
   );
-
-  console.log("orders", orders);
-  console.log("isExpand", isExpand);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -82,7 +93,6 @@ const OrderGridComponent = () => {
   const handleDelete = (id: string) => {
     // Handle delete logic here
     dispatch(deleteOrder(id));
-    // console.log("delete", id);
   };
 
   const handleUpdate = (id: string) => {
@@ -107,67 +117,73 @@ const OrderGridComponent = () => {
   }
 
   return (
-    <Table data={data} theme={theme}>
-      {(tableList: any) => (
-        <>
-          <Header>
-            <HeaderRow>
-              <HeaderCell>OrderNumber</HeaderCell>
-              <HeaderCell>Date</HeaderCell>
-              <HeaderCell>Total</HeaderCell>
-              <HeaderCell>Items</HeaderCell>
-              <HeaderCell>Status</HeaderCell>
-              <HeaderCell>Delivery</HeaderCell>
-              <HeaderCell>Actions</HeaderCell>
-            </HeaderRow>
-          </Header>
+    <>
+      <Table data={data} theme={theme}>
+        {(tableList: any) => (
+          <>
+            <Header>
+              <HeaderRow>
+                <HeaderCell>OrderNumber</HeaderCell>
+                <HeaderCell>email</HeaderCell>
+                <HeaderCell>Date</HeaderCell>
+                <HeaderCell>Total</HeaderCell>
+                <HeaderCell>Items</HeaderCell>
+                <HeaderCell>Status</HeaderCell>
+                <HeaderCell>Delivery</HeaderCell>
+                <HeaderCell>Actions</HeaderCell>
+              </HeaderRow>
+            </Header>
 
-          <Body>
-            {tableList.map((item: any) => (
-              <Fragment key={item.id}>
-                <Row item={item}>
-                  <Cell>{item.orderNumber}</Cell>
-                  <Cell>{moment(item.orderDate).format("MMMM DD YYYY")}</Cell>
-                  <Cell>{item.totalAmount}</Cell>
-                  <Cell>{item.products.length}</Cell>
-                  <Cell>{item.status}</Cell>
-                  <Cell>
-                    {moment(item.deliveryDate).format("MMMM DD YYYY")}
-                  </Cell>
-                  <Cell>
-                    <>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => handleUpdate(item.id)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => setIsExpand((prev) => !prev)}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </>
-                  </Cell>
-                </Row>
-                <Row item={item.products}>
-                  <Cell>
-                    {isExpand && <NestedTable products={item.products} />}
-                  </Cell>
-                </Row>
-              </Fragment>
-            ))}
-          </Body>
-        </>
-      )}
-    </Table>
+            <Body>
+              {tableList.map((item: any) => (
+                <Fragment key={item.id}>
+                  <Row item={item}>
+                    <Cell>{item.orderNumber}</Cell>
+                    <Cell>{item.customer.email}</Cell>
+                    <Cell>{moment(item.orderDate).format("MMMM DD YYYY")}</Cell>
+                    <Cell>{item.totalAmount}</Cell>
+                    <Cell>{item.products.length}</Cell>
+                    <Cell>{item.status}</Cell>
+                    <Cell>
+                      {moment(item.deliveryDate).format("MMMM DD YYYY")}
+                    </Cell>
+                    <Cell>
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleUpdate(item.id)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => setIsExpand((prev) => !prev)}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </>
+                    </Cell>
+                  </Row>
+                  {isExpand && (
+                    <NestedTable
+                      products={item.products}
+                      customer={item.customer}
+                    />
+                  )}
+                </Fragment>
+              ))}
+            </Body>
+          </>
+        )}
+      </Table>
+      {/* {isExpand && <NestedTable products={orderData} />} */}
+    </>
   );
 };
 

@@ -63,12 +63,6 @@ const InventoryGridComponent = () => {
     // open modal
   };
 
-  const handleAdd = () => {
-    // Handle add logic here
-    // dispatch(addProduct());
-    // open modal
-  };
-
   const data = { nodes: productData, links: [] };
 
   const theme = useTheme(tableTheme);
@@ -118,9 +112,6 @@ const InventoryGridComponent = () => {
                       onClick={() => handleUpdate(item.id)}
                     >
                       <EditIcon />
-                    </IconButton>
-                    <IconButton size="small" onClick={() => handleAdd()}>
-                      <AddIcon />
                     </IconButton>
                   </>
                 </Cell>
