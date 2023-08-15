@@ -29,7 +29,7 @@ import AddIcon from "../../assets/icons/AddIcon";
 interface OrderProps {
   orders: object[];
   loading: boolean;
-  error: string | null;
+  error: object | null;
 }
 
 const NestedTable = ({ products, customer }: any) => {

@@ -4,13 +4,21 @@ import { fetchOrders, fetchOrderById, deleteOrder } from "./orderActions";
 interface OrderState {
   orders: [];
   loading: boolean;
-  error: string | null;
+  error: {
+    message: string;
+    code: string;
+    origin: string;
+  };
 }
 
 const initialState: OrderState = {
   orders: [],
   loading: false,
-  error: null,
+  error: {
+    message: "",
+    code: "",
+    origin: "",
+  },
 };
 
 export const orderSlice = createSlice({
@@ -27,7 +35,11 @@ export const orderSlice = createSlice({
       state.error = action.payload;
     },
     clearError: (state) => {
-      state.error = null;
+      state.error = {
+        message: "",
+        code: "",
+        origin: "",
+      };
     },
   },
   extraReducers: (builder) => {

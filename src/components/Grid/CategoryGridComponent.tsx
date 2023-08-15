@@ -27,7 +27,7 @@ import AddIcon from "../../assets/icons/AddIcon";
 interface CategoryProps {
   categories: object[];
   loading: boolean;
-  error: string | null;
+  error: object | null;
 }
 
 const CategoryGridComponent = () => {
@@ -81,7 +81,7 @@ const CategoryGridComponent = () => {
   return (
     <>
       <Table data={data} theme={theme}>
-        {(tableList) => (
+        {(tableList: any) => (
           <>
             <Header>
               <HeaderRow>

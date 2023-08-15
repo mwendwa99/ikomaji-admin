@@ -9,13 +9,21 @@ import {
 interface CategoryState {
   categories: [];
   loading: boolean;
-  error: string | null;
+  error: {
+    message: string;
+    code: string;
+    origin: string;
+  };
 }
 
 const initialState: CategoryState = {
   categories: [],
   loading: false,
-  error: null,
+  error: {
+    message: "",
+    code: "",
+    origin: "",
+  },
 };
 
 export const categorySlice = createSlice({
@@ -32,7 +40,11 @@ export const categorySlice = createSlice({
       state.error = action.payload;
     },
     clearError: (state) => {
-      state.error = null;
+      state.error = {
+        message: "",
+        code: "",
+        origin: "",
+      };
     },
   },
   extraReducers: (builder) => {

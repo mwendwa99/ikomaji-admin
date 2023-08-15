@@ -9,13 +9,21 @@ import {
 interface ProductState {
   products: [];
   loading: boolean;
-  error: string | null;
+  error: {
+    message: string;
+    code: string;
+    origin: string;
+  };
 }
 
 const initialState: ProductState = {
   products: [],
   loading: false,
-  error: null,
+  error: {
+    message: "",
+    code: "",
+    origin: "",
+  },
 };
 
 export const productSlice = createSlice({
@@ -32,7 +40,11 @@ export const productSlice = createSlice({
       state.error = action.payload;
     },
     clearError: (state) => {
-      state.error = null;
+      state.error = {
+        message: "",
+        code: "",
+        origin: "",
+      };
     },
   },
   extraReducers: (builder) => {

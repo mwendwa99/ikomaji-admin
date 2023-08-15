@@ -17,17 +17,15 @@ import {
   fetchProducts,
   deleteProduct,
   addProduct,
-  updateProduct,
 } from "../../redux/products/productActions";
 
 import DeleteIcon from "../../assets/icons/DeleteIcon";
 import EditIcon from "../../assets/icons/EditIcon";
-import AddIcon from "../../assets/icons/AddIcon";
 
 interface ProductProps {
   products: object[];
   loading: boolean;
-  error: string | null;
+  error: object | null;
 }
 
 const InventoryGridComponent = () => {
@@ -74,7 +72,7 @@ const InventoryGridComponent = () => {
 
   return (
     <Table data={data} theme={theme}>
-      {(tableList) => (
+      {(tableList: any) => (
         <>
           <Header>
             <HeaderRow>
@@ -92,7 +90,7 @@ const InventoryGridComponent = () => {
             {tableList.map((item: any) => (
               <Row key={item.id} item={item}>
                 <Cell>{item.name}</Cell>
-                <Cell>{item.category.name}</Cell>
+                <Cell>{item.category?.name}</Cell>
                 <Cell>{item.price}</Cell>
                 <Cell>{item.quantity}</Cell>
                 <Cell style={{ wordWrap: "break-word" }}>
