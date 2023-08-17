@@ -35,10 +35,6 @@ const InventoryGridComponent = () => {
     (state) => state.products
   );
 
-  console.log("products", products);
-  console.log("productData", productData);
-  console.log("error", error);
-
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

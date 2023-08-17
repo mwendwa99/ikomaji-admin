@@ -13,7 +13,6 @@ export const theme = createTheme({
     },
     text: {
       primary: "#000000",
-      secondary: "#FFFFFF",
     },
     background: {
       default: "#F2F2F2",

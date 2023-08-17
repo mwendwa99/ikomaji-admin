@@ -53,7 +53,7 @@ export const addProduct = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/products", {
+      const response = await fetch("http://localhost:3000/api/product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
