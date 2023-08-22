@@ -37,16 +37,32 @@ interface CategoryProps {
   categories: object[];
 }
 
+interface FormDataProps {
+  name: string;
+  price: number;
+  quantity: number;
+  size: string;
+  description: string;
+  categoryId: string;
+  image: string;
+}
+
+const cloud_name: string = import.meta.env.VITE_APP_CLOUDINARY_CLOUD;
+const preset: string = import.meta.env.VITE_APP_CLOUDINARY_PRESET;
+
+// console.log(cloud_name, preset);
+
 export default function InventoryPage() {
   const [open, setOpen] = useState(false);
   const [categoryList, setCategoryList] = useState<object[]>([]); // [{id: 1, name: "category1"}, {id: 2, name: "category2"}
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormDataProps>({
     name: "",
     price: 0,
     quantity: 0,
+    size: "",
     description: "",
     categoryId: "",
-    image: null,
+    image: "",
   });
   const dispatch = useAppDispatch();
   const { error } = useAppSelector<ProductProps>((state) => state.products);
@@ -69,13 +85,19 @@ export default function InventoryPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "price" || name === "quantity" ? Number(value) : value,
+    }));
   };
 
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "price" || name === "quantity" ? Number(value) : value,
+    }));
   };
 
   const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,19 +107,52 @@ export default function InventoryPage() {
       const file = files[0];
       const reader = new FileReader();
 
-      reader.onload = () => {
-        const byteArray = new Uint8Array(reader.result as ArrayBuffer);
-        setFormData((prev) => ({ ...prev, [name]: byteArray }));
-      };
+      reader.addEventListener("load", async () => {
+        const imageUrl = await uploadImage(reader.result); // Upload the Data URL
+        setFormData((prev) => ({ ...prev, [name]: imageUrl })); // Update the form data with the image URL
+      });
 
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file); // Read the file as a Data URL
     }
+  };
+  const uploadImage = async (imageDataUrl: any) => {
+    const imageData = new FormData();
+    imageData.append("file", imageDataUrl); // Pass the Data URL directly
+
+    // Add your Cloudinary upload preset and cloud name
+    imageData.append("upload_preset", preset);
+    imageData.append("cloud_name", cloud_name);
+
+    // set a custom publicId to uniquely identify each image from its filename
+    const filename = imageDataUrl.split("/").pop()?.slice(0, 6);
+    console.log(`${formData.name}-${filename}`);
+    imageData.append("public_id", `${formData.name}-${filename}` || "");
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+      {
+        method: "POST",
+        body: imageData,
+      }
+    );
+
+    const data = await res.json();
+    return data.url;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addProduct(formData));
-    // console.log(JSON.stringify(formData));
+    const productData = {
+      name: formData.name,
+      price: parseFloat(formData.price),
+      quantity: parseInt(formData.quantity),
+      size: formData.size,
+      description: formData.description,
+      categoryId: formData.categoryId,
+      image: formData.image, // Assuming 'image' is the key for the image URL
+    };
+    // dispatch(addProduct(productData));
+    console.log(productData);
   };
 
   return (
@@ -160,6 +215,19 @@ export default function InventoryPage() {
                       name="quantity"
                       label="Quantity"
                       type="number"
+                      fullWidth
+                      required
+                      inputProps={{ min: 0 }}
+                    />
+                  </Grid>
+                  <Grid item sm={6}>
+                    <TextField
+                      margin="normal"
+                      id="product_size"
+                      onChange={handleChange}
+                      name="size"
+                      label="Size"
+                      type="size"
                       fullWidth
                       required
                       inputProps={{ min: 0 }}

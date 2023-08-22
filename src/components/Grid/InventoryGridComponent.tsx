@@ -92,7 +92,18 @@ const InventoryGridComponent = () => {
                 <Cell style={{ wordWrap: "break-word" }}>
                   {item.description}
                 </Cell>
-                <Cell>{item.image}</Cell>
+                <Cell>
+                  <div style={{ objectFit: "contain" }}>
+                    {item.image && (
+                      <img
+                        width="50px"
+                        height="50px"
+                        src={item.image}
+                        alt={item.image}
+                      />
+                    )}
+                  </div>
+                </Cell>
                 <Cell>
                   <>
                     <IconButton
