@@ -108,7 +108,7 @@ export default function MiniDrawer({
   handleSelectedPage,
 }: ChildrenProps) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -164,7 +164,14 @@ export default function MiniDrawer({
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        open={open}
+        ModalProps={{
+          keepMounted: true,
+        }}
+      >
         <DrawerHeader sx={{ backgroundColor: "#46de99" }}>
           <img src={logo} height={40} width={"100%"} alt="logo" />
           <IconButton onClick={handleDrawerClose}>

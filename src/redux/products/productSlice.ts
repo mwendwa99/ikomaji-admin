@@ -4,6 +4,7 @@ import {
   addProduct,
   fetchProductById,
   deleteProduct,
+  updateProduct,
 } from "./productActions";
 
 interface ProductState {
@@ -90,6 +91,17 @@ export const productSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
+        state.error = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.products = action.payload as any;
+        state.loading = false;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
         state.error = action.payload as any;
         state.loading = false;
       });

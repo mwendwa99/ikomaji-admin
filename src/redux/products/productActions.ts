@@ -7,7 +7,7 @@ export const fetchProducts = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/products");
+      const response = await fetch("http://localhost:3000/api/products/all");
       const data = await response.json();
       dispatch(setProducts(data));
       dispatch(setLoading(false));
@@ -53,7 +53,7 @@ export const addProduct = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/product", {
+      const response = await fetch("http://localhost:3000/api/product/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const deleteProduct = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/product/${id}`, {
+      await fetch(`http://localhost:3000/api/product/delete/${id}`, {
         method: "DELETE",
       });
       dispatch(fetchProducts());
@@ -92,6 +92,38 @@ export const deleteProduct = createAsyncThunk(
           message: error.message,
           status: error.status,
           origin: "deleteProduct",
+        })
+      );
+      dispatch(setLoading(false));
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ id, ...product }, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/product/update/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        }
+      );
+      const data = await response.json();
+      dispatch(setProducts(data));
+      dispatch(setLoading(false));
+    } catch (error: any) {
+      dispatch(
+        setError({
+          message: error.message,
+          status: error.status,
+          origin: "updateProduct",
         })
       );
       dispatch(setLoading(false));

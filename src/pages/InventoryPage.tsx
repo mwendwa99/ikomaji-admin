@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { addProduct } from "../redux/products/productActions";
+import {
+  addProduct,
+  updateProduct,
+  fetchProducts,
+} from "../redux/products/productActions";
 import { fetchCategory } from "../redux/categories/categoryActions";
 
 import {
@@ -14,11 +18,9 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
-  FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Input,
   OutlinedInput,
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -38,6 +40,7 @@ interface CategoryProps {
 }
 
 interface FormDataProps {
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -47,15 +50,12 @@ interface FormDataProps {
   image: string;
 }
 
-const cloud_name: string = import.meta.env.VITE_APP_CLOUDINARY_CLOUD;
-const preset: string = import.meta.env.VITE_APP_CLOUDINARY_PRESET;
-
-// console.log(cloud_name, preset);
-
 export default function InventoryPage() {
   const [open, setOpen] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [categoryList, setCategoryList] = useState<object[]>([]); // [{id: 1, name: "category1"}, {id: 2, name: "category2"}
   const [formData, setFormData] = useState<FormDataProps>({
+    id: "",
     name: "",
     price: 0,
     quantity: 0,
@@ -79,7 +79,10 @@ export default function InventoryPage() {
     }
   }, [categories]);
 
-  const handleOpenDialog = () => setOpen(true);
+  const handleOpenDialog = () => {
+    setIsUpdate((prev) => !prev);
+    setOpen(true);
+  };
   const handleCloseDialog = () => setOpen(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,16 +119,17 @@ export default function InventoryPage() {
     }
   };
   const uploadImage = async (imageDataUrl: any) => {
+    const cloud_name = import.meta.env.VITE_APP_CLOUDINARY_CLOUD;
+
     const imageData = new FormData();
     imageData.append("file", imageDataUrl); // Pass the Data URL directly
 
     // Add your Cloudinary upload preset and cloud name
-    imageData.append("upload_preset", preset);
-    imageData.append("cloud_name", cloud_name);
+    imageData.append("upload_preset", "ikomaji-preset");
+    imageData.append("cloud_name", `${cloud_name}`);
 
     // set a custom publicId to uniquely identify each image from its filename
     const filename = imageDataUrl.split("/").pop()?.slice(0, 6);
-    console.log(`${formData.name}-${filename}`);
     imageData.append("public_id", `${formData.name}-${filename}` || "");
 
     const res = await fetch(
@@ -151,8 +155,29 @@ export default function InventoryPage() {
       categoryId: formData.categoryId,
       image: formData.image, // Assuming 'image' is the key for the image URL
     };
-    // dispatch(addProduct(productData));
-    console.log(productData);
+    if (isUpdate) {
+      dispatch(updateProduct(formData)).then(() => {
+        setIsUpdate(false);
+        setOpen(false);
+        dispatch(fetchProducts());
+      });
+    } else {
+      dispatch(addProduct(productData));
+    }
+  };
+
+  const handleUpdate = (item: any) => {
+    setFormData({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      size: item.size,
+      description: item.description,
+      categoryId: item.categoryId,
+      image: item.image,
+    });
+    setIsUpdate(true);
   };
 
   return (
@@ -169,7 +194,10 @@ export default function InventoryPage() {
           </Button>
         </Grid>
         <Grid item sm={12}>
-          <InventoryGridComponent />
+          <InventoryGridComponent
+            handleOpenDialog={handleOpenDialog}
+            handleUpdate={handleUpdate}
+          />
         </Grid>
         <Grid item sm={12}>
           <Dialog open={open} onClose={handleCloseDialog}>
@@ -188,6 +216,7 @@ export default function InventoryPage() {
                       name="name"
                       label="Name"
                       type="text"
+                      value={formData.name}
                       fullWidth
                       required
                     />
@@ -200,6 +229,7 @@ export default function InventoryPage() {
                       name="price"
                       label="Price"
                       type="number"
+                      value={formData.price}
                       fullWidth
                       required
                       inputProps={{ min: 0 }}
@@ -215,6 +245,7 @@ export default function InventoryPage() {
                       name="quantity"
                       label="Quantity"
                       type="number"
+                      value={formData.quantity}
                       fullWidth
                       required
                       inputProps={{ min: 0 }}
@@ -228,6 +259,7 @@ export default function InventoryPage() {
                       name="size"
                       label="Size"
                       type="size"
+                      value={formData.size}
                       fullWidth
                       required
                       inputProps={{ min: 0 }}
@@ -250,6 +282,7 @@ export default function InventoryPage() {
                       id="product-image"
                       placeholder="Upload Image"
                       fullWidth
+                      // value={formData.image}
                       // required
                       inputProps={{
                         accept: "image/*",
@@ -266,10 +299,10 @@ export default function InventoryPage() {
                       id="select-category"
                       name="categoryId"
                       label="Category"
-                      value={formData.categoryId}
                       fullWidth
                       required
                       onChange={handleSelectChange}
+                      value={formData.categoryId}
                     >
                       {categoryList.map((category: any) => (
                         <MenuItem key={category.id} value={category.id}>
@@ -286,6 +319,7 @@ export default function InventoryPage() {
                   name="description"
                   label="Description"
                   type="text"
+                  value={formData.description}
                   fullWidth
                   required
                   multiline
@@ -297,7 +331,9 @@ export default function InventoryPage() {
                   <Typography variant="button">cancel</Typography>
                 </Button>
                 <Button type="submit" variant="outlined">
-                  <Typography variant="button">add</Typography>
+                  <Typography variant="button">
+                    {isUpdate ? "Update" : "Add"}
+                  </Typography>
                 </Button>
               </DialogActions>
             </form>

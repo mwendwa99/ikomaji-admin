@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { IconButton, CircularProgress } from "@mui/material";
 import {
   Table,
@@ -16,7 +16,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   fetchProducts,
   deleteProduct,
-  addProduct,
 } from "../../redux/products/productActions";
 
 import DeleteIcon from "../../assets/icons/DeleteIcon";
@@ -28,10 +27,29 @@ interface ProductProps {
   error: object | null;
 }
 
-const InventoryGridComponent = () => {
+interface InventoryGridComponentProps {
+  handleOpenDialog: () => void;
+  handleUpdate: (item: ItemProps) => void;
+}
+
+interface ItemProps {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  size: string;
+  description: string;
+  categoryId: string;
+  image: string;
+}
+
+const InventoryGridComponent: React.FC<InventoryGridComponentProps> = ({
+  handleOpenDialog,
+  handleUpdate,
+}) => {
   const dispatch = useAppDispatch();
   const [productData, setProductData] = useState<object[]>([]);
-  const { products, loading, error } = useAppSelector<ProductProps>(
+  const { products, loading } = useAppSelector<ProductProps>(
     (state) => state.products
   );
 
@@ -40,38 +58,34 @@ const InventoryGridComponent = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (products) {
-      setProductData(() => products);
+    if (Array.isArray(products)) {
+      setProductData(products); // Only update if products is an array
     }
   }, [products]);
 
   const handleDelete = (id: string) => {
-    // Handle delete logic here
     dispatch(deleteProduct(id));
-    // console.log("delete", id);
   };
 
-  const handleUpdate = (id: string) => {
-    // Handle update logic here
-    // dispatch(updateProdu(id));
-    // open modal
+  const handleUpdateItem = (item: ItemProps) => {
+    handleOpenDialog();
+    handleUpdate(item);
   };
 
   const data = { nodes: productData, links: [] };
-
   const theme = useTheme(tableTheme);
 
   if (loading) {
-    // Show a loading indicator or message while fetching data
     return <CircularProgress />;
   }
 
   return (
-    <Table data={data} theme={theme}>
+    <Table data={data} theme={theme} layout={{ fixedHeader: true }}>
       {(tableList: any) => (
         <>
-          <Header>
+          <Header width={10}>
             <HeaderRow>
+              <HeaderCell>No.</HeaderCell>
               <HeaderCell>Product</HeaderCell>
               <HeaderCell>Category</HeaderCell>
               <HeaderCell>Price</HeaderCell>
@@ -83,8 +97,9 @@ const InventoryGridComponent = () => {
           </Header>
 
           <Body>
-            {tableList.map((item: any) => (
+            {tableList.map((item: any, index: any) => (
               <Row key={item.id} item={item}>
+                <Cell>{++index}</Cell>
                 <Cell>{item.name}</Cell>
                 <Cell>{item.category?.name}</Cell>
                 <Cell>{item.price}</Cell>
@@ -114,7 +129,7 @@ const InventoryGridComponent = () => {
                     </IconButton>
                     <IconButton
                       size="small"
-                      onClick={() => handleUpdate(item.id)}
+                      onClick={() => handleUpdateItem(item)}
                     >
                       <EditIcon />
                     </IconButton>
