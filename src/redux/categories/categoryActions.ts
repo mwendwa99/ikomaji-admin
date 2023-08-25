@@ -81,11 +81,11 @@ export const addCategory = createAsyncThunk(
 
 export const updateCategory = createAsyncThunk(
   "categories/updateCategory",
-  async (category: any, { dispatch }) => {
+  async ({ id, ...category }, { dispatch }) => {
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/categories/${category.id}`, {
+      await fetch(`http://localhost:3000/api/category/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

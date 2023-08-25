@@ -157,7 +157,7 @@ export default function InventoryPage() {
     };
     if (isUpdate) {
       dispatch(updateProduct(formData)).then(() => {
-        setIsUpdate(false);
+        setIsUpdate(() => false);
         setOpen(false);
         dispatch(fetchProducts());
       });
@@ -177,7 +177,7 @@ export default function InventoryPage() {
       categoryId: item.categoryId,
       image: item.image,
     });
-    setIsUpdate(true);
+    setIsUpdate(() => true);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { IconButton, CircularProgress } from "@mui/material";
 import {
   Table,
@@ -16,13 +16,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   fetchCategory,
   deleteCategory,
-  addCategory,
-  updateCategory,
 } from "../../redux/categories/categoryActions";
 
 import DeleteIcon from "../../assets/icons/DeleteIcon";
 import EditIcon from "../../assets/icons/EditIcon";
-import AddIcon from "../../assets/icons/AddIcon";
 
 interface CategoryProps {
   categories: object[];
@@ -30,16 +27,27 @@ interface CategoryProps {
   error: object | null;
 }
 
-const CategoryGridComponent = () => {
+interface ItemProps {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+}
+
+interface CategoryGridComponentProps {
+  handleOpenDialog: () => void;
+  handleUpdate: (item: ItemProps) => void;
+}
+
+const CategoryGridComponent: React.FC<CategoryGridComponentProps> = ({
+  handleOpenDialog,
+  handleUpdate,
+}) => {
   const dispatch = useAppDispatch();
   const [categoryData, setCategoryData] = useState<object[]>([]);
-  const { categories, loading, error } = useAppSelector<CategoryProps>(
+  const { categories, loading } = useAppSelector<CategoryProps>(
     (state) => state.categories
   );
-
-  console.log("categories", categories);
-  console.log("categoryData", categoryData);
-  console.log("error", error);
 
   useEffect(() => {
     dispatch(fetchCategory());
@@ -57,16 +65,9 @@ const CategoryGridComponent = () => {
     // console.log("delete", id);
   };
 
-  const handleUpdate = (id: string) => {
-    // Handle update logic here
-    // dispatch(updateCategory(id));
-    // open modal
-  };
-
-  const handleAdd = () => {
-    // Handle add logic here
-    // dispatch(addCategory());
-    // open modal
+  const handleUpdateItem = (item: ItemProps) => {
+    handleOpenDialog();
+    handleUpdate(item);
   };
 
   const data = { nodes: categoryData, links: [] };
@@ -97,7 +98,18 @@ const CategoryGridComponent = () => {
                 <Row key={item.id} item={item}>
                   <Cell>{item.name}</Cell>
                   <Cell>{item.description}</Cell>
-                  <Cell>{item.image}</Cell>
+                  <Cell>
+                    <div style={{ objectFit: "contain" }}>
+                      {item.image && (
+                        <img
+                          width="50px"
+                          height="50px"
+                          src={item.image}
+                          alt={item.image}
+                        />
+                      )}
+                    </div>
+                  </Cell>
                   <Cell>
                     <>
                       <IconButton
@@ -108,12 +120,9 @@ const CategoryGridComponent = () => {
                       </IconButton>
                       <IconButton
                         size="small"
-                        onClick={() => handleUpdate(item.id)}
+                        onClick={() => handleUpdateItem(item)}
                       >
                         <EditIcon />
-                      </IconButton>
-                      <IconButton size="small" onClick={() => handleAdd()}>
-                        <AddIcon />
                       </IconButton>
                     </>
                   </Cell>
