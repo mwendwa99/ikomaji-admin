@@ -36,9 +36,6 @@ const ModalComponent: FC<ModalComponentProps> = ({
   handleCloseModal,
   handleSaveChanges,
 }) => {
-  // console.log("selectedRow", selectedRow);
-  // console.log("editedRow", editedRow);
-
   return (
     <Box sx={{ height: "300px" }}>
       <Modal

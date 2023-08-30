@@ -58,7 +58,7 @@ export const addCategory = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/categories`, {
+      await fetch(`http://localhost:3000/api/category/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

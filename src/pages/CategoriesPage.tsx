@@ -30,7 +30,7 @@ interface CategoryPageProps {
     origin: string;
   };
 }
-
+//******************FIX UPDATE ISSUE */
 export default function CategoriesPage() {
   const [open, setOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -45,8 +45,8 @@ export default function CategoriesPage() {
     (state) => state.categories
   );
 
-  const handleOpenDialog = () => {
-    setIsUpdate((prev) => !prev);
+  const handleOpenDialog = (isUpdate: boolean) => {
+    if (!isUpdate) setIsUpdate(false);
     setOpen(true);
   };
   const handleCloseDialog = () => setOpen(false);
@@ -105,7 +105,7 @@ export default function CategoriesPage() {
       description: item.description,
       image: item.image,
     });
-    setIsUpdate(() => true);
+    setIsUpdate(true);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -122,7 +122,11 @@ export default function CategoriesPage() {
         dispatch(fetchCategory());
       });
     } else {
-      dispatch(addCategory(categoryData));
+      dispatch(addCategory(categoryData)).then(() => {
+        setIsUpdate(() => false);
+        setOpen(false);
+        dispatch(fetchCategory());
+      });
     }
   };
 
@@ -135,7 +139,10 @@ export default function CategoriesPage() {
       )}
       <Grid container sx={{ flex: 1, height: "100%" }}>
         <Grid item sm={12} sx={{ my: 2 }}>
-          <Button variant="contained" onClick={handleOpenDialog}>
+          <Button
+            variant="contained"
+            onClick={() => handleOpenDialog(!isUpdate)}
+          >
             <Typography variant="body1">Add</Typography>
           </Button>
         </Grid>

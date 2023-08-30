@@ -62,7 +62,6 @@ const CategoryGridComponent: React.FC<CategoryGridComponentProps> = ({
   const handleDelete = (id: string) => {
     // Handle delete logic here
     dispatch(deleteCategory(id));
-    // console.log("delete", id);
   };
 
   const handleUpdateItem = (item: ItemProps) => {
