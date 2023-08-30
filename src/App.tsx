@@ -1,5 +1,4 @@
 import { useContext } from "react";
-
 import { DrawerContext } from "./context/DrawerContext";
 import "./App.css";
 
@@ -9,51 +8,27 @@ import Box from "@mui/material/Box";
 import InventoryPage from "./pages/InventoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import SupportPage from "./pages/SupportPage";
 
 import Drawer from "./components/Drawer/Drawer";
 
 function App() {
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
 
-  switch (selectedPage) {
-    case "Dashboard":
-      return (
-        <div style={containerStyle}>
-          <CssBaseline />
-          <Drawer handleSelectedPage={handleSelectedPage}>
-            <DashboardPage />
-          </Drawer>
-          <Box id="historyList"></Box>
+  return (
+    <Box sx={containerStyle}>
+      <CssBaseline />
+      <Drawer handleSelectedPage={handleSelectedPage}>
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {selectedPage === "Dashboard" && <DashboardPage />}
+          {selectedPage === "Inventory" && <InventoryPage />}
+          {selectedPage === "Category" && <CategoriesPage />}
+          {selectedPage === "Support" && <SupportPage />}
+          {selectedPage === "NotFound" && <h1>Page Not Found</h1>}
         </div>
-      );
-    case "Inventory":
-      return (
-        <div style={containerStyle}>
-          <CssBaseline />
-          <Drawer handleSelectedPage={handleSelectedPage}>
-            <InventoryPage />
-          </Drawer>
-        </div>
-      );
-    case "Category":
-      return (
-        <div style={containerStyle}>
-          <CssBaseline />
-          <Drawer handleSelectedPage={handleSelectedPage}>
-            <CategoriesPage />
-          </Drawer>
-        </div>
-      );
-    default:
-      return (
-        <div style={containerStyle}>
-          <CssBaseline />
-          <Drawer handleSelectedPage={handleSelectedPage}>
-            <h1>Page Not Found</h1>
-          </Drawer>
-        </div>
-      );
-  }
+      </Drawer>
+    </Box>
+  );
 }
 
 export default App;
@@ -61,5 +36,7 @@ export default App;
 const containerStyle = {
   flex: 1,
   backgroundColor: "#fafafb",
-  height: "100%",
+  minHeight: "100vh",
+  position: "relative",
+  zIndex: 1,
 };
