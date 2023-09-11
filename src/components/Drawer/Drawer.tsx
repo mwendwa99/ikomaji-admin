@@ -20,13 +20,13 @@ import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import PaidIcon from "@mui/icons-material/Paid";
+import DiscountIcon from "@mui/icons-material/Discount";
 
 import logo from "../../assets/logo.svg";
 
 const drawerWidth = 200;
 
-const PrimaryPageArray = ["Dashboard", "Inventory", "Category"];
+const PrimaryPageArray = ["Dashboard", "Inventory", "Category", "Discounts"];
 const SecondaryPageArray = ["Support", "Logout"];
 
 interface ChildrenProps {
@@ -126,8 +126,8 @@ export default function MiniDrawer({
         return <InventoryIcon />;
       case "Category":
         return <CategoryIcon />;
-      // case "Income":
-      //   return <PaidIcon />;
+      case "Discounts":
+        return <DiscountIcon />;
       case "Support":
         return <ContactSupportIcon />;
       case "Logout":
