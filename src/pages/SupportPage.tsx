@@ -50,7 +50,7 @@ export default SupportPage;
 
 const backgroundImageStyle = {
   filter: "blur(1px)", // Adjust the blur amount as needed
-  position: "absolute",
+  position: "absolute" as const,
   top: 0,
   left: 0,
   width: "100%",

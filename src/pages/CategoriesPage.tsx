@@ -45,7 +45,7 @@ export default function CategoriesPage() {
     (state) => state.categories
   );
 
-  const handleOpenDialog = (isUpdate: boolean) => {
+  const handleOpenDialog = (isUpdate?: boolean) => {
     if (!isUpdate) setIsUpdate(false);
     setOpen(true);
   };

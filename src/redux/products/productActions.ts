@@ -7,7 +7,7 @@ export const fetchProducts = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/products/all");
+      const response = await fetch("http://localhost:8080/api/products/all");
       const data = await response.json();
       dispatch(setProducts(data));
       dispatch(setLoading(false));
@@ -30,7 +30,7 @@ export const fetchProductById = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch(`http://localhost:3000/api/product/${id}`);
+      const response = await fetch(`http://localhost:8080/api/product/${id}`);
       const data = await response.json();
       dispatch(setProducts(data));
       dispatch(setLoading(false));
@@ -53,7 +53,7 @@ export const addProduct = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/product/create", {
+      const response = await fetch("http://localhost:8080/api/product/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const deleteProduct = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/product/delete/${id}`, {
+      await fetch(`http://localhost:8080/api/product/delete/${id}`, {
         method: "DELETE",
       });
       dispatch(fetchProducts());
@@ -106,7 +106,7 @@ export const updateProduct = createAsyncThunk(
     dispatch(clearError());
     try {
       const response = await fetch(
-        `http://localhost:3000/api/product/update/${id}`,
+        `http://localhost:8080/api/product/update/${id}`,
         {
           method: "PUT",
           headers: {

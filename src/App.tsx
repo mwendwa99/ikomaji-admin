@@ -4,16 +4,27 @@ import "./App.css";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import InventoryPage from "./pages/InventoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import SupportPage from "./pages/SupportPage";
+import SignInPage from "./pages/SignInPage";
 
 import Drawer from "./components/Drawer/Drawer";
 
 function App() {
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
+  const { user, isLoading, isAuthenticated } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+
+  // if (!isAuthenticated) {
+  //   return <SignInPage />;
+  // }
 
   return (
     <Box sx={containerStyle}>
@@ -24,6 +35,7 @@ function App() {
           {selectedPage === "Inventory" && <InventoryPage />}
           {selectedPage === "Category" && <CategoriesPage />}
           {selectedPage === "Support" && <SupportPage />}
+          {selectedPage === "Logout" && <SignInPage />}
           {selectedPage === "NotFound" && <h1>Page Not Found</h1>}
         </div>
       </Drawer>

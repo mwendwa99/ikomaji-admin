@@ -12,7 +12,7 @@ export const fetchCategory = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/categories");
+      const response = await fetch("http://localhost:8080/api/categories");
       const data = await response.json();
       dispatch(setCategories(data));
       dispatch(setLoading(false));
@@ -35,7 +35,7 @@ export const deleteCategory = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/categories/${id}`, {
+      await fetch(`http://localhost:8080/api/categories/${id}`, {
         method: "DELETE",
       });
       dispatch(fetchCategory());
@@ -58,7 +58,7 @@ export const addCategory = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/category/create`, {
+      await fetch(`http://localhost:8080/api/category/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const updateCategory = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/category/update/${id}`, {
+      await fetch(`http://localhost:8080/api/category/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

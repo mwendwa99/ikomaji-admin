@@ -7,7 +7,7 @@ export const fetchOrders = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch("http://localhost:3000/api/orders");
+      const response = await fetch("http://localhost:8080/api/orders");
       const data = await response.json();
       dispatch(setOrders(data));
       dispatch(setLoading(false));
@@ -30,7 +30,7 @@ export const fetchOrderById = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      const response = await fetch(`http://localhost:3000/api/order/${id}`);
+      const response = await fetch(`http://localhost:8080/api/order/${id}`);
       const data = await response.json();
       dispatch(setOrders(data));
       dispatch(setLoading(false));
@@ -53,7 +53,7 @@ export const deleteOrder = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:3000/api/order/${id}`, {
+      await fetch(`http://localhost:8080/api/order/${id}`, {
         method: "DELETE",
       });
       dispatch(fetchOrders());
