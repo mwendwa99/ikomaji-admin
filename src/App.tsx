@@ -10,13 +10,14 @@ import InventoryPage from "./pages/InventoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import SupportPage from "./pages/SupportPage";
+import DiscountsPage from "./pages/DiscountsPage";
 import SignInPage from "./pages/SignInPage";
 
 import Drawer from "./components/Drawer/Drawer";
 
 function App() {
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
-  const { user, isLoading, isAuthenticated } = useAuth0();
+  const { isLoading } = useAuth0();
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -34,6 +35,7 @@ function App() {
           {selectedPage === "Dashboard" && <DashboardPage />}
           {selectedPage === "Inventory" && <InventoryPage />}
           {selectedPage === "Category" && <CategoriesPage />}
+          {selectedPage === "Discounts" && <DiscountsPage />}
           {selectedPage === "Support" && <SupportPage />}
           {selectedPage === "Logout" && <SignInPage />}
           {selectedPage === "NotFound" && <h1>Page Not Found</h1>}

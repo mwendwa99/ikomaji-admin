@@ -111,6 +111,7 @@ export default function CategoriesPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const categoryData = {
+      id: formData.id,
       name: formData.name,
       description: formData.description,
       image: formData.image, // Assuming 'image' is the key for the image URL

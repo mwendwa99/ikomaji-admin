@@ -6,12 +6,12 @@ import {
   setError,
 } from "./discountSlice";
 
-export const fetchDiscount = createAsyncThunk(
+export const fetchDiscounts = createAsyncThunk(
   "discounts/fetchDiscounts",
   async (_, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
     try {
-      dispatch(setLoading(true));
-      dispatch(clearError());
       const response = await fetch("http://localhost:8080/api/discounts/");
       const data = await response.json();
       dispatch(setDiscounts(data));
@@ -32,19 +32,17 @@ export const fetchDiscount = createAsyncThunk(
 export const addDiscount = createAsyncThunk(
   "discounts/addDiscount",
   async (discount, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
     try {
-      dispatch(setLoading(true));
-      dispatch(clearError());
-      const response = await fetch("http://localhost:8080/api/discounts/", {
+      await fetch("http://localhost:8080/api/discount/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(discount),
       });
-      const data = await response.json();
-      dispatch(setDiscounts(data));
-      dispatch(setLoading(false));
+      dispatch(fetchDiscounts());
     } catch (error: any) {
       dispatch(
         setError({
@@ -61,18 +59,13 @@ export const addDiscount = createAsyncThunk(
 export const deleteDiscount = createAsyncThunk(
   "discounts/deleteDiscount",
   async (id, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
     try {
-      dispatch(setLoading(true));
-      dispatch(clearError());
-      const response = await fetch(
-        `http://localhost:8080/api/discounts/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      dispatch(setDiscounts(data));
-      dispatch(setLoading(false));
+      await fetch(`http://localhost:8080/api/discounts/${id}`, {
+        method: "DELETE",
+      });
+      dispatch(fetchDiscounts());
     } catch (error: any) {
       dispatch(
         setError({
@@ -89,22 +82,17 @@ export const deleteDiscount = createAsyncThunk(
 export const updateDiscount = createAsyncThunk(
   "discounts/updateDiscount",
   async (discount, { dispatch }) => {
+    dispatch(setLoading(true));
+    dispatch(clearError());
     try {
-      dispatch(setLoading(true));
-      dispatch(clearError());
-      const response = await fetch(
-        `http://localhost:8080/api/discounts/${discount?.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(discount),
-        }
-      );
-      const data = await response.json();
-      dispatch(setDiscounts(data));
-      dispatch(setLoading(false));
+      await fetch(`http://localhost:8080/api/discounts/${discount.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(discount),
+      });
+      dispatch(fetchDiscounts());
     } catch (error: any) {
       dispatch(
         setError({

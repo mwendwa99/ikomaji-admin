@@ -1,12 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  fetchDiscount,
+  fetchDiscounts,
   updateDiscount,
   deleteDiscount,
   addDiscount,
 } from "./discountActions";
 
-const initialState = {
+interface DiscountState {
+  discounts: [];
+  loading: boolean;
+  error: {
+    message: string;
+    code: string;
+    origin: string;
+  };
+}
+
+const initialState: DiscountState = {
   discounts: [],
   loading: false,
   error: {
@@ -39,14 +49,14 @@ export const discountSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDiscount.pending, (state) => {
+      .addCase(fetchDiscounts.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchDiscount.fulfilled, (state, action) => {
+      .addCase(fetchDiscounts.fulfilled, (state, action) => {
         state.discounts = action.payload as any;
         state.loading = false;
       })
-      .addCase(fetchDiscount.rejected, (state, action) => {
+      .addCase(fetchDiscounts.rejected, (state, action) => {
         state.error = action.payload as any;
         state.loading = false;
       })

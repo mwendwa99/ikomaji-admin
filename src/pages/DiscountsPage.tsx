@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import moment from "moment";
 import {
   addDiscount,
   updateDiscount,
-  fetchDiscount,
+  fetchDiscounts,
 } from "../redux/discounts/discountActions";
 import {
   Grid,
@@ -15,13 +16,13 @@ import {
   DialogContent,
   DialogContentText,
   TextField,
-  OutlinedInput,
   DialogActions,
 } from "@mui/material";
 
 import DiscountGridComponent from "../components/Grid/DiscountGridComponent";
+import { formatDate, uploadImage } from "../utils/functions";
 
-interface discountProps {
+interface DiscountProps {
   discounts: [];
   loading: boolean;
   error: {
@@ -38,10 +39,12 @@ export default function CategoriesPage() {
   const [formData, setFormData] = useState({
     id: "",
     name: "",
+    percentage: 0,
+    expiresAt: "",
     description: "",
     image: "",
   });
-  const { error } = useAppSelector<discountProps>((state) => state.discounts);
+  const { error } = useAppSelector<DiscountProps>((state) => state.discounts);
 
   const handleOpenDialog = (isUpdate?: boolean) => {
     if (!isUpdate) setIsUpdate(false);
@@ -52,7 +55,11 @@ export default function CategoriesPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // If the input type is "date," use moment to format the date
+    const updatedValue =
+      e.target.type === "date" ? moment(value).format("YYYY-MM-DD") : value;
+
+    setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
 
   const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,37 +70,13 @@ export default function CategoriesPage() {
       const reader = new FileReader();
 
       reader.addEventListener("load", async () => {
-        const imageUrl = await uploadImage(reader.result); // Upload the Data URL
+        const imageString = reader.result as string;
+        const imageUrl = await uploadImage(imageString, formData.name); // Upload the Data URL
         setFormData((prev) => ({ ...prev, [name]: imageUrl })); // Update the form data with the image URL
       });
 
       reader.readAsDataURL(file); // Read the file as a Data URL
     }
-  };
-  const uploadImage = async (imageDataUrl: any) => {
-    const cloud_name = import.meta.env.VITE_APP_CLOUDINARY_CLOUD;
-
-    const imageData = new FormData();
-    imageData.append("file", imageDataUrl); // Pass the Data URL directly
-
-    // Add your Cloudinary upload preset and cloud name
-    imageData.append("upload_preset", "ikomaji-preset");
-    imageData.append("cloud_name", `${cloud_name}`);
-
-    // set a custom publicId to uniquely identify each image from its filename
-    const filename = imageDataUrl.split("/").pop()?.slice(0, 6);
-    imageData.append("public_id", `${formData.name}-${filename}` || "");
-
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-      {
-        method: "POST",
-        body: imageData,
-      }
-    );
-
-    const data = await res.json();
-    return data.url;
   };
 
   const handleUpdate = (item: any) => {
@@ -101,6 +84,8 @@ export default function CategoriesPage() {
       id: item.id,
       name: item.name,
       description: item.description,
+      expiresAt: item.expiresAt,
+      percentage: parseInt(item.percentage),
       image: item.image,
     });
     setIsUpdate(true);
@@ -110,6 +95,8 @@ export default function CategoriesPage() {
     e.preventDefault();
     const discountData = {
       name: formData.name,
+      percentage: formData.percentage / 100,
+      expiresAt: formatDate(formData.expiresAt),
       description: formData.description,
       image: formData.image, // Assuming 'image' is the key for the image URL
     };
@@ -117,14 +104,15 @@ export default function CategoriesPage() {
       dispatch(updateDiscount(formData)).then(() => {
         setIsUpdate(() => false);
         setOpen(false);
-        dispatch(fetchDiscount());
+        dispatch(fetchDiscounts());
       });
     } else {
-      dispatch(addDiscount(discountData)).then(() => {
-        setIsUpdate(() => false);
-        setOpen(false);
-        dispatch(fetchDiscount());
-      });
+      console.log(discountData);
+      // dispatch(addDiscount(discountData)).then(() => {
+      //   setIsUpdate(() => false);
+      //   setOpen(false);
+      //   dispatch(fetchDiscounts());
+      // });
     }
   };
 
@@ -152,7 +140,7 @@ export default function CategoriesPage() {
         </Grid>
         <Grid item sm={12}>
           <Dialog open={open} onClose={handleCloseDialog}>
-            <DialogTitle>Add Category</DialogTitle>
+            <DialogTitle>Add Discount</DialogTitle>
             <form style={{}} onSubmit={handleSubmit}>
               <DialogContent sx={{ py: 0 }}>
                 <DialogContentText>
@@ -181,7 +169,10 @@ export default function CategoriesPage() {
                       alignItems: "center",
                     }}
                   >
-                    <OutlinedInput
+                    <TextField
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                       label="Image"
                       className="discount-image"
                       type="file"
@@ -195,6 +186,42 @@ export default function CategoriesPage() {
                         content: "image/png",
                       }}
                       onChange={handleImageInputChange}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                  <Grid item sm={6}>
+                    <TextField
+                      margin="normal"
+                      id="discount_percentage"
+                      onChange={handleChange}
+                      name="percentage"
+                      label="Percentage"
+                      type="number"
+                      value={formData.percentage}
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item sm={6}>
+                    <TextField
+                      margin="normal"
+                      id="expiresAt"
+                      onChange={handleChange}
+                      name="expiresAt"
+                      label="Expiry Date"
+                      type="date"
+                      value={formData.expiresAt || ""}
+                      fullWidth
+                      required
+                      variant="outlined"
+                      InputLabelProps={{
+                        shrink: true,
+                        required: true,
+                      }}
+                      inputProps={{
+                        inputMode: "numeric",
+                      }}
                     />
                   </Grid>
                 </Grid>
