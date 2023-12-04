@@ -123,7 +123,8 @@ const OrderGridComponent = () => {
           <>
             <Header>
               <HeaderRow>
-                <HeaderCell>OrderNumber</HeaderCell>
+                <HeaderCell>No.</HeaderCell>
+                <HeaderCell>Order Number</HeaderCell>
                 <HeaderCell>email</HeaderCell>
                 <HeaderCell>Date</HeaderCell>
                 <HeaderCell>Total</HeaderCell>
@@ -135,9 +136,10 @@ const OrderGridComponent = () => {
             </Header>
 
             <Body>
-              {tableList.map((item: any) => (
+              {tableList.map((item: any, index: number) => (
                 <Fragment key={item.id}>
                   <Row item={item}>
+                    <Cell>{++index}</Cell>
                     <Cell>{item.orderNumber}</Cell>
                     <Cell>{item.customer.email}</Cell>
                     <Cell>{moment(item.orderDate).format("MMMM DD YYYY")}</Cell>

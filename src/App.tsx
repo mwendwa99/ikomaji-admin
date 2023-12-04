@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DrawerContext } from "./context/DrawerContext";
 import "./App.css";
 
@@ -18,6 +18,11 @@ import Drawer from "./components/Drawer/Drawer";
 function App() {
   const { selectedPage, handleSelectedPage } = useContext(DrawerContext);
   const { isLoading } = useAuth0();
+
+  // add selected page to url
+  useEffect(() => {
+    window.history.replaceState({}, "", `/${selectedPage}`);
+  }, [selectedPage]);
 
   if (isLoading) {
     return <div>Loading ...</div>;

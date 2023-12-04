@@ -22,6 +22,8 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DiscountIcon from "@mui/icons-material/Discount";
 
+import { DrawerContext } from "../../context/DrawerContext";
+
 import logo from "../../assets/logo.svg";
 
 const drawerWidth = 200;
@@ -109,6 +111,7 @@ export default function MiniDrawer({
 }: ChildrenProps) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const { selectedPage } = React.useContext(DrawerContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,6 +138,11 @@ export default function MiniDrawer({
       default:
         return <></>;
     }
+  };
+
+  // method to check if the page is selected
+  const isSelected = (text: string) => {
+    return text === selectedPage;
   };
 
   return (
@@ -197,6 +205,7 @@ export default function MiniDrawer({
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                selected={isSelected(text)}
               >
                 <ListItemIcon
                   sx={{
@@ -227,6 +236,7 @@ export default function MiniDrawer({
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                selected={isSelected(text)}
               >
                 <ListItemIcon
                   sx={{

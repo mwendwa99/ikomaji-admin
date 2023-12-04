@@ -1,10 +1,16 @@
 // converts date to ISO-8601 DateTime
-export const formatDate = (date: any) => {
-  if (date instanceof Date && !isNaN(date.getTime())) {
-    const isoDate = date.toISOString();
-    return isoDate.split("T")[0]; // Extract the "YYYY-MM-DD" part
+export const formatDate = (date: Date | undefined): string => {
+  // Check if 'date' is a valid Date object
+  if (date instanceof Date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  } else {
+    // Handle the case when 'date' is not a valid Date object
+    console.error("Invalid date object:", date);
+    return ""; // or throw an error, return a default value, etc.
   }
-  return ""; // Handle invalid or empty date values
 };
 
 // uploads image to cloudinary

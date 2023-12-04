@@ -85,6 +85,7 @@ const CategoryGridComponent: React.FC<CategoryGridComponentProps> = ({
           <>
             <Header>
               <HeaderRow>
+                <HeaderCell>No.</HeaderCell>
                 <HeaderCell>Category</HeaderCell>
                 <HeaderCell>Description</HeaderCell>
                 <HeaderCell>Image</HeaderCell>
@@ -93,8 +94,9 @@ const CategoryGridComponent: React.FC<CategoryGridComponentProps> = ({
             </Header>
 
             <Body>
-              {tableList.map((item: any) => (
+              {tableList.map((item: any, index: number) => (
                 <Row key={item.id} item={item}>
+                  <Cell>{++index}</Cell>
                   <Cell>{item.name}</Cell>
                   <Cell>{item.description}</Cell>
                   <Cell>

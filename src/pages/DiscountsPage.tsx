@@ -17,10 +17,11 @@ import {
   DialogContentText,
   TextField,
   DialogActions,
+  InputAdornment,
 } from "@mui/material";
 
 import DiscountGridComponent from "../components/Grid/DiscountGridComponent";
-import { formatDate, uploadImage } from "../utils/functions";
+import { uploadImage } from "../utils/functions";
 
 interface DiscountProps {
   discounts: [];
@@ -96,7 +97,7 @@ export default function CategoriesPage() {
     const discountData = {
       name: formData.name,
       percentage: formData.percentage / 100,
-      expiresAt: formatDate(formData.expiresAt),
+      expiresAt: formData.expiresAt,
       description: formData.description,
       image: formData.image, // Assuming 'image' is the key for the image URL
     };
@@ -219,8 +220,16 @@ export default function CategoriesPage() {
                         shrink: true,
                         required: true,
                       }}
-                      inputProps={{
-                        inputMode: "numeric",
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment
+                            position="end"
+                            style={{ color: "black" }}
+                          >
+                            &#128197;{" "}
+                            {/* Unicode character for the calendar icon */}
+                          </InputAdornment>
+                        ),
                       }}
                     />
                   </Grid>

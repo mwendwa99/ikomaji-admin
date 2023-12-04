@@ -64,7 +64,8 @@ const InventoryGridComponent: React.FC<InventoryGridComponentProps> = ({
   }, [products]);
 
   const handleDelete = (id: string) => {
-    dispatch(deleteProduct(id));
+    alert("Are you sure you want to delete this product?");
+    // dispatch(deleteProduct(id));
   };
 
   const handleUpdateItem = (item: ItemProps) => {
@@ -97,7 +98,7 @@ const InventoryGridComponent: React.FC<InventoryGridComponentProps> = ({
           </Header>
 
           <Body>
-            {tableList.map((item: any, index: any) => (
+            {tableList.map((item: any, index: number) => (
               <Row key={item.id} item={item}>
                 <Cell>{++index}</Cell>
                 <Cell>{item.name}</Cell>
