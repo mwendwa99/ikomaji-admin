@@ -66,6 +66,7 @@ const CategoryGridComponent: React.FC<CategoryGridComponentProps> = ({
 
   const handleUpdateItem = (item: ItemProps) => {
     handleOpenDialog();
+    // console.log(item);
     handleUpdate(item);
   };
 

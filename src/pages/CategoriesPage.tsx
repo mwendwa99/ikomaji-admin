@@ -105,7 +105,7 @@ export default function CategoriesPage() {
       description: item.description,
       image: item.image,
     });
-    setIsUpdate(true);
+    setIsUpdate(() => true);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

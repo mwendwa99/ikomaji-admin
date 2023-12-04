@@ -40,7 +40,7 @@ export default function CategoriesPage() {
   const [formData, setFormData] = useState({
     id: "",
     name: "",
-    percentage: 0,
+    percentage: 0.0,
     expiresAt: "",
     description: "",
     image: "",
@@ -57,8 +57,13 @@ export default function CategoriesPage() {
     const { name, value } = e.target;
 
     // If the input type is "date," use moment to format the date
+    // if input type is percentage, convert to float
     const updatedValue =
-      e.target.type === "date" ? moment(value).format("YYYY-MM-DD") : value;
+      e.target.type === "date"
+        ? moment(value).format("YYYY-MM-DD")
+        : e.target.name === "percentage"
+        ? parseFloat(value)
+        : value;
 
     setFormData((prev) => ({ ...prev, [name]: updatedValue }));
   };
@@ -86,17 +91,17 @@ export default function CategoriesPage() {
       name: item.name,
       description: item.description,
       expiresAt: item.expiresAt,
-      percentage: parseInt(item.percentage),
+      percentage: parseFloat(item.percentage),
       image: item.image,
     });
-    setIsUpdate(true);
+    setIsUpdate(() => true);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const discountData = {
       name: formData.name,
-      percentage: formData.percentage / 100,
+      percentage: parseInt(formData.percentage) / 100,
       expiresAt: formData.expiresAt,
       description: formData.description,
       image: formData.image, // Assuming 'image' is the key for the image URL
@@ -107,13 +112,14 @@ export default function CategoriesPage() {
         setOpen(false);
         dispatch(fetchDiscounts());
       });
+      // console.log(formData);
     } else {
-      console.log(discountData);
-      // dispatch(addDiscount(discountData)).then(() => {
-      //   setIsUpdate(() => false);
-      //   setOpen(false);
-      //   dispatch(fetchDiscounts());
-      // });
+      // console.log(discountData);
+      dispatch(addDiscount(discountData)).then(() => {
+        setIsUpdate(() => false);
+        setOpen(false);
+        dispatch(fetchDiscounts());
+      });
     }
   };
 
@@ -202,6 +208,11 @@ export default function CategoriesPage() {
                       value={formData.percentage}
                       fullWidth
                       required
+                      inputProps={{
+                        min: 0,
+                        max: 100,
+                        step: 0.01,
+                      }}
                     />
                   </Grid>
                   <Grid item sm={6}>

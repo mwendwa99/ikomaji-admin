@@ -85,7 +85,7 @@ export const updateDiscount = createAsyncThunk(
     dispatch(setLoading(true));
     dispatch(clearError());
     try {
-      await fetch(`http://localhost:8080/api/discounts/${discount.id}`, {
+      await fetch(`http://localhost:8080/api/discount/update/${discount.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -68,6 +68,7 @@ const CategoryGridComponent: React.FC<DiscountGridComponentProps> = ({
 
   const handleUpdateItem = (item: ItemProps) => {
     handleOpenDialog();
+    // console.log(item);
     handleUpdate(item);
   };
 
@@ -87,6 +88,7 @@ const CategoryGridComponent: React.FC<DiscountGridComponentProps> = ({
           <>
             <Header>
               <HeaderRow>
+                <HeaderCell>No.</HeaderCell>
                 <HeaderCell>Discount</HeaderCell>
                 <HeaderCell>Percentage</HeaderCell>
                 <HeaderCell>Description</HeaderCell>
@@ -97,12 +99,13 @@ const CategoryGridComponent: React.FC<DiscountGridComponentProps> = ({
             </Header>
 
             <Body>
-              {tableList.map((item: any) => (
+              {tableList.map((item: any, index: number) => (
                 <Row key={item.id} item={item}>
+                  <Cell>{++index}</Cell>
                   <Cell>{item.name}</Cell>
-                  <Cell>{item.percentage}</Cell>
-                  <Cell>{item.expiresAt}</Cell>
+                  <Cell>{item.percentage}%</Cell>
                   <Cell>{item.description}</Cell>
+                  <Cell>{item.expiresAt}</Cell>
                   <Cell>
                     <div style={{ objectFit: "contain" }}>
                       {item.image && (
