@@ -28,7 +28,7 @@ import logo from "../../assets/logo.svg";
 
 const drawerWidth = 200;
 
-const PrimaryPageArray = ["Dashboard", "Inventory", "Category", "Discounts"];
+const PrimaryPageArray = ["Orders", "Inventory", "Category", "Discounts"];
 const SecondaryPageArray = ["Support", "Logout"];
 
 interface ChildrenProps {
@@ -123,7 +123,7 @@ export default function MiniDrawer({
 
   const SwitchIcons = (text: string) => {
     switch (text) {
-      case "Dashboard":
+      case "Orders":
         return <SpaceDashboardIcon />;
       case "Inventory":
         return <InventoryIcon />;

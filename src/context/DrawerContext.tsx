@@ -9,7 +9,7 @@ interface DrawerContextType {
 }
 
 const initialState: DrawerContextType = {
-  selectedPage: "Dashboard",
+  selectedPage: "Orders",
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   handleSelectedPage: () => {},
 };
@@ -18,7 +18,7 @@ const initialState: DrawerContextType = {
 export const DrawerContext = createContext(initialState);
 
 const DrawerContextProvider = ({ children }: ChildrenType) => {
-  const [selectedPage, setSelectedPage] = useState<string>("Dashboard");
+  const [selectedPage, setSelectedPage] = useState<string>("Orders");
 
   const handleSelectedPage = (page: string) => {
     setSelectedPage(page);

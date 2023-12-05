@@ -37,7 +37,7 @@ function App() {
       <CssBaseline />
       <Drawer handleSelectedPage={handleSelectedPage}>
         <div style={{ position: "relative", zIndex: 1 }}>
-          {selectedPage === "Dashboard" && <DashboardPage />}
+          {selectedPage === "Orders" && <DashboardPage />}
           {selectedPage === "Inventory" && <InventoryPage />}
           {selectedPage === "Category" && <CategoriesPage />}
           {selectedPage === "Discounts" && <DiscountsPage />}

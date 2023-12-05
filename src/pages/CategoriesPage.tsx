@@ -108,6 +108,16 @@ export default function CategoriesPage() {
     setIsUpdate(() => true);
   };
 
+  const resetForm = () => {
+    setFormData({
+      id: "",
+      name: "",
+      description: "",
+      image: "",
+    });
+    setIsUpdate(() => false);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const categoryData = {
@@ -127,6 +137,7 @@ export default function CategoriesPage() {
         setIsUpdate(() => false);
         setOpen(false);
         dispatch(fetchCategory());
+        resetForm();
       });
     }
   };

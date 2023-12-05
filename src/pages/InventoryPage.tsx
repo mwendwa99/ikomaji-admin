@@ -144,6 +144,20 @@ export default function InventoryPage() {
     return data.url;
   };
 
+  const resetForm = () => {
+    setFormData({
+      id: "",
+      name: "",
+      price: 0,
+      quantity: 0,
+      size: "",
+      description: "",
+      categoryId: "",
+      image: "",
+    });
+    setIsUpdate(() => false);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const productData = {
@@ -162,7 +176,12 @@ export default function InventoryPage() {
         dispatch(fetchProducts());
       });
     } else {
-      dispatch(addProduct(productData));
+      dispatch(addProduct(productData)).then(() => {
+        setIsUpdate(() => false);
+        setOpen(false);
+        dispatch(fetchProducts());
+        resetForm();
+      });
     }
   };
 

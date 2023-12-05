@@ -97,11 +97,23 @@ export default function CategoriesPage() {
     setIsUpdate(() => true);
   };
 
+  const resetForm = () => {
+    setFormData({
+      id: "",
+      name: "",
+      description: "",
+      expiresAt: "",
+      percentage: 0.0,
+      image: "",
+    });
+    setIsUpdate(() => false);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const discountData = {
       name: formData.name,
-      percentage: parseInt(formData.percentage) / 100,
+      percentage: parseInt(formData.percentage),
       expiresAt: formData.expiresAt,
       description: formData.description,
       image: formData.image, // Assuming 'image' is the key for the image URL
@@ -119,6 +131,7 @@ export default function CategoriesPage() {
         setIsUpdate(() => false);
         setOpen(false);
         dispatch(fetchDiscounts());
+        resetForm();
       });
     }
   };
@@ -205,7 +218,7 @@ export default function CategoriesPage() {
                       name="percentage"
                       label="Percentage"
                       type="number"
-                      value={formData.percentage}
+                      value={formData.percentage || ""}
                       fullWidth
                       required
                       inputProps={{
